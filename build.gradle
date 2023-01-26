@@ -1,0 +1,46 @@
+plugins {
+    id 'java-library'
+    id "com.diffplug.spotless" version "6.12.1"
+    id "org.openrewrite.rewrite" version "5.34.0"
+}
+
+configurations {
+    tool
+}
+
+group = 'com.waigel.sgp22-asn1'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    tool 'com.beanit:asn1bean-compiler:1.13.0'
+    implementation 'com.beanit:asn1bean:1.13.0'
+}
+
+rewrite {
+    activeRecipe("org.openrewrite.java.OrderImports")
+    activeRecipe("org.openrewrite.java.RemoveUnusedImports")
+    activeRecipe("org.openrewrite.java.format.AutoFormat")
+    activeRecipe("org.openrewrite.java.cleanup.AddSerialVersionUidToSerializable")
+    activeRecipe("org.openrewrite.java.cleanup.FixSerializableFields")
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        googleJavaFormat()
+
+    }
+}
+
+
+task genAsn1(type: JavaExec) {
+    mainClass = 'com.beanit.asn1bean.compiler.Compiler'
+    args "-o", "$projectDir/src/main/java", "-dv", "-p", "com.waigel.sgp22.asn1", "-f", "$projectDir/asn1/PKIXExplicit88.asn", "$projectDir/asn1/PKIXImplicit88.asn", "$projectDir/asn1/GSMA-SGP.22-v2.2.asn"
+    classpath configurations.tool
+}
+
