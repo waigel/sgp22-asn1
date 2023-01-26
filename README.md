@@ -9,3 +9,14 @@ The library provides a set of classes that can be used to construct, encode and 
 ```gradle
 implementation("com.waigel.sgp22.asn1:sgp22-asn1")
 ```
+## Example 
+
+Example in kotlin:
+
+```kotlin
+val base64EncodedString = "vyA1ggMCAgKpFgQUgTcPUSXQsdQI1MOyMubSXnlb6/uqFgQUgTcPUSXQsdQI1MOyMubSXnlb6/s=";
+val encodedBytes = Base64.getDecoder().decode(base64EncodedString)
+val eUICCInfo1 = EUICCInfo1();
+eUICCInfo1.decode(encodedBytes.inputStream());
+println(eUICCInfo1.svn)
+```
