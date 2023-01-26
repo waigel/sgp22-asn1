@@ -1,5 +1,8 @@
 plugins {
-    id 'java-library'
+    id "idea"
+    id "java-library"
+    id "maven-publish"
+    id "signing"
     id "com.diffplug.spotless" version "6.12.1"
     id "org.openrewrite.rewrite" version "5.34.0"
 }
@@ -8,9 +11,11 @@ configurations {
     tool
 }
 
-group = 'com.waigel.sgp22-asn1'
+group = 'com.waigel.sgp22.asn1'
 version = '1.0.0'
-sourceCompatibility = '17'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 repositories {
     mavenCentral()
@@ -37,6 +42,10 @@ spotless {
     }
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
 
 task genAsn1(type: JavaExec) {
     mainClass = 'com.beanit.asn1bean.compiler.Compiler'
@@ -44,3 +53,60 @@ task genAsn1(type: JavaExec) {
     classpath configurations.tool
 }
 
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+publishing {
+    repositories {
+        maven {
+            def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = isReleaseVersion ? releaseRepo : snapshotRepo
+            credentials {
+                username = findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                password = findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                groupId = 'com.waigel.sgp22.asn1'
+                name = 'sgp22-asn1'
+                description = 'Contains the SGP22-v2.2 ASN.1 definitions and the generated Java classes'
+                url = 'https://github.com/waigel/sgp22-asn1'
+                packaging = 'jar'
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/waigel/sgp22-asn1/blob/main/LICENSE'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/waigel/sgp22-asn1'
+                    connection = 'scm:git://github.com:waigel/sgp22-asn1.git'
+                    developerConnection = 'scm:git://github.com:waigel/sgp22-asn1r.git'
+                }
+
+                developers {
+                    developer {
+                        id = 'waigel'
+                        name = 'Johannes Waigel'
+                        email = 'johannes@waigel.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
+}
