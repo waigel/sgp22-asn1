@@ -8,17 +8,15 @@ import com.beanit.asn1bean.ber.types.BerObjectIdentifier;
 
 public class HoldInstructionCode extends BerObjectIdentifier {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public HoldInstructionCode() {
-	}
+  public HoldInstructionCode() {}
 
-	public HoldInstructionCode(byte[] code) {
-		super(code);
-	}
+  public HoldInstructionCode(byte[] code) {
+    super(code);
+  }
 
-	public HoldInstructionCode(int[] value) {
-		super(value);
-	}
-
+  public HoldInstructionCode(int[] value) {
+    super(value);
+  }
 }

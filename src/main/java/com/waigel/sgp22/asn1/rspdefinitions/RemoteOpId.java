@@ -13,60 +13,58 @@ import java.math.BigInteger;
 
 public class RemoteOpId extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 2);
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 2);
 
-	private byte[] code = null;
+  private byte[] code = null;
 
-	public RemoteOpId() {
-	}
+  public RemoteOpId() {}
 
-	public RemoteOpId(byte[] code) {
-		this.code = code;
-	}
+  public RemoteOpId(byte[] code) {
+    this.code = code;
+  }
 
-	public RemoteOpId(BigInteger value) {
-		super(value);
-	}
+  public RemoteOpId(BigInteger value) {
+    super(value);
+  }
 
-	public RemoteOpId(long value) {
-		super(value);
-	}
+  public RemoteOpId(long value) {
+    super(value);
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		int codeLength;
+    int codeLength;
 
-		codeLength = super.encode(reverseOS, false);
-		if (withTag) {
-			codeLength += tag.encode(reverseOS);
-		}
+    codeLength = super.encode(reverseOS, false);
+    if (withTag) {
+      codeLength += tag.encode(reverseOS);
+    }
 
-		return codeLength;
-	}
+    return codeLength;
+  }
 
-	@Override
-	public int decode(InputStream is, boolean withTag) throws IOException {
+  @Override
+  public int decode(InputStream is, boolean withTag) throws IOException {
 
-		int codeLength = 0;
+    int codeLength = 0;
 
-		if (withTag) {
-			codeLength += tag.decodeAndCheck(is);
-		}
+    if (withTag) {
+      codeLength += tag.decodeAndCheck(is);
+    }
 
-		codeLength += super.decode(is, false);
+    codeLength += super.decode(is, false);
 
-		return codeLength;
-	}
-
+    return codeLength;
+  }
 }

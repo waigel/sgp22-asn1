@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerPrintableString;
 
-
 public class X520dnQualifier extends BerPrintableString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public X520dnQualifier() {
-	}
+  public X520dnQualifier() {}
 
-	public X520dnQualifier(byte[] value) {
-		super(value);
-	}
-
+  public X520dnQualifier(byte[] value) {
+    super(value);
+  }
 }

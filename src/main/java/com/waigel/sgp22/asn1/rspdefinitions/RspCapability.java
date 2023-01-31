@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class RspCapability extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public RspCapability() {
-	}
+  public RspCapability() {}
 
-	public RspCapability(byte[] code) {
-		super(code);
-	}
+  public RspCapability(byte[] code) {
+    super(code);
+  }
 
-	public RspCapability(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public RspCapability(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public RspCapability(boolean[] value) {
-		super(value);
-	}
-
+  public RspCapability(boolean[] value) {
+    super(value);
+  }
 }

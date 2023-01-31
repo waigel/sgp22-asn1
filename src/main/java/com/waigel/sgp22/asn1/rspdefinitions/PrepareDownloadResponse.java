@@ -15,143 +15,144 @@ import java.io.Serializable;
 
 public class PrepareDownloadResponse implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 33);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 33);
 
-	private PrepareDownloadResponseOk downloadResponseOk = null;
-	private PrepareDownloadResponseError downloadResponseError = null;
+  private PrepareDownloadResponseOk downloadResponseOk = null;
+  private PrepareDownloadResponseError downloadResponseError = null;
 
-	public PrepareDownloadResponse() {
-	}
+  public PrepareDownloadResponse() {}
 
-	public PrepareDownloadResponse(byte[] code) {
-		this.code = code;
-	}
+  public PrepareDownloadResponse(byte[] code) {
+    this.code = code;
+  }
 
-	public void setDownloadResponseOk(PrepareDownloadResponseOk downloadResponseOk) {
-		this.downloadResponseOk = downloadResponseOk;
-	}
+  public void setDownloadResponseOk(PrepareDownloadResponseOk downloadResponseOk) {
+    this.downloadResponseOk = downloadResponseOk;
+  }
 
-	public PrepareDownloadResponseOk getDownloadResponseOk() {
-		return downloadResponseOk;
-	}
+  public PrepareDownloadResponseOk getDownloadResponseOk() {
+    return downloadResponseOk;
+  }
 
-	public void setDownloadResponseError(PrepareDownloadResponseError downloadResponseError) {
-		this.downloadResponseError = downloadResponseError;
-	}
+  public void setDownloadResponseError(PrepareDownloadResponseError downloadResponseError) {
+    this.downloadResponseError = downloadResponseError;
+  }
 
-	public PrepareDownloadResponseError getDownloadResponseError() {
-		return downloadResponseError;
-	}
+  public PrepareDownloadResponseError getDownloadResponseError() {
+    return downloadResponseError;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (downloadResponseError != null) {
-			codeLength += downloadResponseError.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 1
-			reverseOS.write(0xA1);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (downloadResponseOk != null) {
-			codeLength += downloadResponseOk.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (downloadResponseError != null) {
+      codeLength += downloadResponseError.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 1
+      reverseOS.write(0xA1);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (downloadResponseOk != null) {
+      codeLength += downloadResponseOk.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			downloadResponseOk = new PrepareDownloadResponseOk();
-			tlvByteCount += downloadResponseOk.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 1)) {
-			downloadResponseError = new PrepareDownloadResponseError();
-			tlvByteCount += downloadResponseError.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      downloadResponseOk = new PrepareDownloadResponseOk();
+      tlvByteCount += downloadResponseOk.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 1)) {
+      downloadResponseError = new PrepareDownloadResponseError();
+      tlvByteCount += downloadResponseError.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (downloadResponseOk != null) {
-			sb.append("downloadResponseOk: ");
-			downloadResponseOk.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (downloadResponseError != null) {
-			sb.append("downloadResponseError: ");
-			downloadResponseError.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (downloadResponseOk != null) {
+      sb.append("downloadResponseOk: ");
+      downloadResponseOk.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (downloadResponseError != null) {
+      sb.append("downloadResponseError: ");
+      downloadResponseError.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

@@ -15,162 +15,162 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class PDSParameter implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 17);
+  public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 17);
 
-	private byte[] code = null;
-	private BerPrintableString printableString = null;
-	private BerTeletexString teletexString = null;
+  private byte[] code = null;
+  private BerPrintableString printableString = null;
+  private BerTeletexString teletexString = null;
 
-	public PDSParameter() {
-	}
+  public PDSParameter() {}
 
-	public PDSParameter(byte[] code) {
-		this.code = code;
-	}
+  public PDSParameter(byte[] code) {
+    this.code = code;
+  }
 
-	public void setPrintableString(BerPrintableString printableString) {
-		this.printableString = printableString;
-	}
+  public void setPrintableString(BerPrintableString printableString) {
+    this.printableString = printableString;
+  }
 
-	public BerPrintableString getPrintableString() {
-		return printableString;
-	}
+  public BerPrintableString getPrintableString() {
+    return printableString;
+  }
 
-	public void setTeletexString(BerTeletexString teletexString) {
-		this.teletexString = teletexString;
-	}
+  public void setTeletexString(BerTeletexString teletexString) {
+    this.teletexString = teletexString;
+  }
 
-	public BerTeletexString getTeletexString() {
-		return teletexString;
-	}
+  public BerTeletexString getTeletexString() {
+    return teletexString;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (teletexString != null) {
-			codeLength += teletexString.encode(reverseOS, true);
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (printableString != null) {
-			codeLength += printableString.encode(reverseOS, true);
-		}
+    int codeLength = 0;
+    if (teletexString != null) {
+      codeLength += teletexString.encode(reverseOS, true);
+    }
 
-		codeLength += BerLength.encodeLength(reverseOS, codeLength);
+    if (printableString != null) {
+      codeLength += printableString.encode(reverseOS, true);
+    }
 
-		if (withTag) {
-			codeLength += tag.encode(reverseOS);
-		}
+    codeLength += BerLength.encodeLength(reverseOS, codeLength);
 
-		return codeLength;
+    if (withTag) {
+      codeLength += tag.encode(reverseOS);
+    }
 
-	}
+    return codeLength;
+  }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlByteCount = 0;
-		int vByteCount = 0;
-		BerTag berTag = new BerTag();
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlByteCount = 0;
+    int vByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		if (withTag) {
-			tlByteCount += tag.decodeAndCheck(is);
-		}
+    if (withTag) {
+      tlByteCount += tag.decodeAndCheck(is);
+    }
 
-		BerLength length = new BerLength();
-		tlByteCount += length.decode(is);
-		int lengthVal = length.val;
+    BerLength length = new BerLength();
+    tlByteCount += length.decode(is);
+    int lengthVal = length.val;
 
-		if (lengthVal == 0) {
-			return tlByteCount;
-		}
+    if (lengthVal == 0) {
+      return tlByteCount;
+    }
 
-		while (vByteCount < lengthVal || lengthVal < 0) {
-			vByteCount += berTag.decode(is);
-			if (berTag.equals(BerPrintableString.tag)) {
-				printableString = new BerPrintableString();
-				vByteCount += printableString.decode(is, false);
-			}
-			else if (berTag.equals(BerTeletexString.tag)) {
-				teletexString = new BerTeletexString();
-				vByteCount += teletexString.decode(is, false);
-			}
-			else if (lengthVal < 0 && berTag.equals(0, 0, 0)) {
-				vByteCount += BerLength.readEocByte(is);
-				return tlByteCount + vByteCount;
-			}
-			else {
-				throw new IOException("Tag does not match any set component: " + berTag);
-			}
-		}
-		if (vByteCount != lengthVal) {
-			throw new IOException("Length of set does not match length tag, length tag: " + lengthVal + ", actual set length: " + vByteCount);
-		}
-		return tlByteCount + vByteCount;
-	}
+    while (vByteCount < lengthVal || lengthVal < 0) {
+      vByteCount += berTag.decode(is);
+      if (berTag.equals(BerPrintableString.tag)) {
+        printableString = new BerPrintableString();
+        vByteCount += printableString.decode(is, false);
+      } else if (berTag.equals(BerTeletexString.tag)) {
+        teletexString = new BerTeletexString();
+        vByteCount += teletexString.decode(is, false);
+      } else if (lengthVal < 0 && berTag.equals(0, 0, 0)) {
+        vByteCount += BerLength.readEocByte(is);
+        return tlByteCount + vByteCount;
+      } else {
+        throw new IOException("Tag does not match any set component: " + berTag);
+      }
+    }
+    if (vByteCount != lengthVal) {
+      throw new IOException(
+          "Length of set does not match length tag, length tag: "
+              + lengthVal
+              + ", actual set length: "
+              + vByteCount);
+    }
+    return tlByteCount + vByteCount;
+  }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		sb.append("{");
-		boolean firstSelectedElement = true;
-		if (printableString != null) {
-			sb.append("\n");
-			for (int i = 0; i < indentLevel + 1; i++) {
-				sb.append("\t");
-			}
-			sb.append("printableString: ").append(printableString);
-			firstSelectedElement = false;
-		}
+    sb.append("{");
+    boolean firstSelectedElement = true;
+    if (printableString != null) {
+      sb.append("\n");
+      for (int i = 0; i < indentLevel + 1; i++) {
+        sb.append("\t");
+      }
+      sb.append("printableString: ").append(printableString);
+      firstSelectedElement = false;
+    }
 
-		if (teletexString != null) {
-			if (!firstSelectedElement) {
-				sb.append(",\n");
-			}
-			for (int i = 0; i < indentLevel + 1; i++) {
-				sb.append("\t");
-			}
-			sb.append("teletexString: ").append(teletexString);
-		}
+    if (teletexString != null) {
+      if (!firstSelectedElement) {
+        sb.append(",\n");
+      }
+      for (int i = 0; i < indentLevel + 1; i++) {
+        sb.append("\t");
+      }
+      sb.append("teletexString: ").append(teletexString);
+    }
 
-		sb.append("\n");
-		for (int i = 0; i < indentLevel; i++) {
-			sb.append("\t");
-		}
-		sb.append("}");
-	}
-
+    sb.append("\n");
+    for (int i = 0; i < indentLevel; i++) {
+      sb.append("\t");
+    }
+    sb.append("}");
+  }
 }
-

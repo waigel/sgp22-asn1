@@ -11,341 +11,341 @@ import com.beanit.asn1bean.ber.types.BerObjectIdentifier;
 import com.beanit.asn1bean.ber.types.BerOctetString;
 import com.beanit.asn1bean.ber.types.BerType;
 import com.beanit.asn1bean.ber.types.string.BerIA5String;
+import com.waigel.sgp22.asn1.pkix1explicit88.Name;
+import com.waigel.sgp22.asn1.pkix1explicit88.ORAddress;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import com.waigel.sgp22.asn1.pkix1explicit88.Name;
-import com.waigel.sgp22.asn1.pkix1explicit88.ORAddress;
-
 public class GeneralName implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private AnotherName otherName = null;
-	private BerIA5String rfc822Name = null;
-	private BerIA5String dNSName = null;
-	private ORAddress x400Address = null;
-	private Name directoryName = null;
-	private EDIPartyName ediPartyName = null;
-	private BerIA5String uniformResourceIdentifier = null;
-	private BerOctetString iPAddress = null;
-	private BerObjectIdentifier registeredID = null;
+  private byte[] code = null;
+  private AnotherName otherName = null;
+  private BerIA5String rfc822Name = null;
+  private BerIA5String dNSName = null;
+  private ORAddress x400Address = null;
+  private Name directoryName = null;
+  private EDIPartyName ediPartyName = null;
+  private BerIA5String uniformResourceIdentifier = null;
+  private BerOctetString iPAddress = null;
+  private BerObjectIdentifier registeredID = null;
 
-	public GeneralName() {
-	}
+  public GeneralName() {}
 
-	public GeneralName(byte[] code) {
-		this.code = code;
-	}
+  public GeneralName(byte[] code) {
+    this.code = code;
+  }
 
-	public void setOtherName(AnotherName otherName) {
-		this.otherName = otherName;
-	}
+  public void setOtherName(AnotherName otherName) {
+    this.otherName = otherName;
+  }
 
-	public AnotherName getOtherName() {
-		return otherName;
-	}
+  public AnotherName getOtherName() {
+    return otherName;
+  }
 
-	public void setRfc822Name(BerIA5String rfc822Name) {
-		this.rfc822Name = rfc822Name;
-	}
+  public void setRfc822Name(BerIA5String rfc822Name) {
+    this.rfc822Name = rfc822Name;
+  }
 
-	public BerIA5String getRfc822Name() {
-		return rfc822Name;
-	}
+  public BerIA5String getRfc822Name() {
+    return rfc822Name;
+  }
 
-	public void setDNSName(BerIA5String dNSName) {
-		this.dNSName = dNSName;
-	}
+  public void setDNSName(BerIA5String dNSName) {
+    this.dNSName = dNSName;
+  }
 
-	public BerIA5String getDNSName() {
-		return dNSName;
-	}
+  public BerIA5String getDNSName() {
+    return dNSName;
+  }
 
-	public void setX400Address(ORAddress x400Address) {
-		this.x400Address = x400Address;
-	}
+  public void setX400Address(ORAddress x400Address) {
+    this.x400Address = x400Address;
+  }
 
-	public ORAddress getX400Address() {
-		return x400Address;
-	}
+  public ORAddress getX400Address() {
+    return x400Address;
+  }
 
-	public void setDirectoryName(Name directoryName) {
-		this.directoryName = directoryName;
-	}
+  public void setDirectoryName(Name directoryName) {
+    this.directoryName = directoryName;
+  }
 
-	public Name getDirectoryName() {
-		return directoryName;
-	}
+  public Name getDirectoryName() {
+    return directoryName;
+  }
 
-	public void setEdiPartyName(EDIPartyName ediPartyName) {
-		this.ediPartyName = ediPartyName;
-	}
+  public void setEdiPartyName(EDIPartyName ediPartyName) {
+    this.ediPartyName = ediPartyName;
+  }
 
-	public EDIPartyName getEdiPartyName() {
-		return ediPartyName;
-	}
+  public EDIPartyName getEdiPartyName() {
+    return ediPartyName;
+  }
 
-	public void setUniformResourceIdentifier(BerIA5String uniformResourceIdentifier) {
-		this.uniformResourceIdentifier = uniformResourceIdentifier;
-	}
+  public void setUniformResourceIdentifier(BerIA5String uniformResourceIdentifier) {
+    this.uniformResourceIdentifier = uniformResourceIdentifier;
+  }
 
-	public BerIA5String getUniformResourceIdentifier() {
-		return uniformResourceIdentifier;
-	}
+  public BerIA5String getUniformResourceIdentifier() {
+    return uniformResourceIdentifier;
+  }
 
-	public void setIPAddress(BerOctetString iPAddress) {
-		this.iPAddress = iPAddress;
-	}
+  public void setIPAddress(BerOctetString iPAddress) {
+    this.iPAddress = iPAddress;
+  }
 
-	public BerOctetString getIPAddress() {
-		return iPAddress;
-	}
+  public BerOctetString getIPAddress() {
+    return iPAddress;
+  }
 
-	public void setRegisteredID(BerObjectIdentifier registeredID) {
-		this.registeredID = registeredID;
-	}
+  public void setRegisteredID(BerObjectIdentifier registeredID) {
+    this.registeredID = registeredID;
+  }
 
-	public BerObjectIdentifier getRegisteredID() {
-		return registeredID;
-	}
+  public BerObjectIdentifier getRegisteredID() {
+    return registeredID;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		int sublength;
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (registeredID != null) {
-			codeLength += registeredID.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 8
-			reverseOS.write(0x88);
-			codeLength += 1;
-			return codeLength;
-		}
+    int codeLength = 0;
+    int sublength;
 
-		if (iPAddress != null) {
-			codeLength += iPAddress.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 7
-			reverseOS.write(0x87);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (registeredID != null) {
+      codeLength += registeredID.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 8
+      reverseOS.write(0x88);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (uniformResourceIdentifier != null) {
-			codeLength += uniformResourceIdentifier.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 6
-			reverseOS.write(0x86);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (iPAddress != null) {
+      codeLength += iPAddress.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 7
+      reverseOS.write(0x87);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (ediPartyName != null) {
-			codeLength += ediPartyName.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 5
-			reverseOS.write(0xA5);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (uniformResourceIdentifier != null) {
+      codeLength += uniformResourceIdentifier.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 6
+      reverseOS.write(0x86);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (directoryName != null) {
-			sublength = directoryName.encode(reverseOS);
-			codeLength += sublength;
-			codeLength += BerLength.encodeLength(reverseOS, sublength);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 4
-			reverseOS.write(0xA4);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (ediPartyName != null) {
+      codeLength += ediPartyName.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 5
+      reverseOS.write(0xA5);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (x400Address != null) {
-			codeLength += x400Address.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 3
-			reverseOS.write(0xA3);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (directoryName != null) {
+      sublength = directoryName.encode(reverseOS);
+      codeLength += sublength;
+      codeLength += BerLength.encodeLength(reverseOS, sublength);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 4
+      reverseOS.write(0xA4);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (dNSName != null) {
-			codeLength += dNSName.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 2
-			reverseOS.write(0x82);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (x400Address != null) {
+      codeLength += x400Address.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 3
+      reverseOS.write(0xA3);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (rfc822Name != null) {
-			codeLength += rfc822Name.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 1
-			reverseOS.write(0x81);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (dNSName != null) {
+      codeLength += dNSName.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 2
+      reverseOS.write(0x82);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		if (otherName != null) {
-			codeLength += otherName.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (rfc822Name != null) {
+      codeLength += rfc822Name.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 1
+      reverseOS.write(0x81);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (otherName != null) {
+      codeLength += otherName.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			otherName = new AnotherName();
-			tlvByteCount += otherName.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
-			rfc822Name = new BerIA5String();
-			tlvByteCount += rfc822Name.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      otherName = new AnotherName();
+      tlvByteCount += otherName.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 2)) {
-			dNSName = new BerIA5String();
-			tlvByteCount += dNSName.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
+      rfc822Name = new BerIA5String();
+      tlvByteCount += rfc822Name.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 3)) {
-			x400Address = new ORAddress();
-			tlvByteCount += x400Address.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 2)) {
+      dNSName = new BerIA5String();
+      tlvByteCount += dNSName.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 4)) {
-			BerLength length = new BerLength();
-			tlvByteCount += length.decode(is);
-			directoryName = new Name();
-			tlvByteCount += directoryName.decode(is, null);
-			tlvByteCount += length.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 3)) {
+      x400Address = new ORAddress();
+      tlvByteCount += x400Address.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 5)) {
-			ediPartyName = new EDIPartyName();
-			tlvByteCount += ediPartyName.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 4)) {
+      BerLength length = new BerLength();
+      tlvByteCount += length.decode(is);
+      directoryName = new Name();
+      tlvByteCount += directoryName.decode(is, null);
+      tlvByteCount += length.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 6)) {
-			uniformResourceIdentifier = new BerIA5String();
-			tlvByteCount += uniformResourceIdentifier.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 5)) {
+      ediPartyName = new EDIPartyName();
+      tlvByteCount += ediPartyName.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 7)) {
-			iPAddress = new BerOctetString();
-			tlvByteCount += iPAddress.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 6)) {
+      uniformResourceIdentifier = new BerIA5String();
+      tlvByteCount += uniformResourceIdentifier.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 8)) {
-			registeredID = new BerObjectIdentifier();
-			tlvByteCount += registeredID.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 7)) {
+      iPAddress = new BerOctetString();
+      tlvByteCount += iPAddress.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 8)) {
+      registeredID = new BerObjectIdentifier();
+      tlvByteCount += registeredID.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (otherName != null) {
-			sb.append("otherName: ");
-			otherName.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (rfc822Name != null) {
-			sb.append("rfc822Name: ").append(rfc822Name);
-			return;
-		}
+    if (otherName != null) {
+      sb.append("otherName: ");
+      otherName.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (dNSName != null) {
-			sb.append("dNSName: ").append(dNSName);
-			return;
-		}
+    if (rfc822Name != null) {
+      sb.append("rfc822Name: ").append(rfc822Name);
+      return;
+    }
 
-		if (x400Address != null) {
-			sb.append("x400Address: ");
-			x400Address.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (dNSName != null) {
+      sb.append("dNSName: ").append(dNSName);
+      return;
+    }
 
-		if (directoryName != null) {
-			sb.append("directoryName: ");
-			directoryName.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (x400Address != null) {
+      sb.append("x400Address: ");
+      x400Address.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (ediPartyName != null) {
-			sb.append("ediPartyName: ");
-			ediPartyName.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (directoryName != null) {
+      sb.append("directoryName: ");
+      directoryName.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (uniformResourceIdentifier != null) {
-			sb.append("uniformResourceIdentifier: ").append(uniformResourceIdentifier);
-			return;
-		}
+    if (ediPartyName != null) {
+      sb.append("ediPartyName: ");
+      ediPartyName.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (iPAddress != null) {
-			sb.append("iPAddress: ").append(iPAddress);
-			return;
-		}
+    if (uniformResourceIdentifier != null) {
+      sb.append("uniformResourceIdentifier: ").append(uniformResourceIdentifier);
+      return;
+    }
 
-		if (registeredID != null) {
-			sb.append("registeredID: ").append(registeredID);
-			return;
-		}
+    if (iPAddress != null) {
+      sb.append("iPAddress: ").append(iPAddress);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (registeredID != null) {
+      sb.append("registeredID: ").append(registeredID);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

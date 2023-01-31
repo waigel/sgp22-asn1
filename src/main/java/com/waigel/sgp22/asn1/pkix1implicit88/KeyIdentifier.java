@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.BerOctetString;
 
 public class KeyIdentifier extends BerOctetString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public KeyIdentifier() {
-	}
+  public KeyIdentifier() {}
 
-	public KeyIdentifier(byte[] value) {
-		super(value);
-	}
-
+  public KeyIdentifier(byte[] value) {
+    super(value);
+  }
 }

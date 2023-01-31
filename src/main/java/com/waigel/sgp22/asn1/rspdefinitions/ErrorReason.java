@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class ErrorReason extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ErrorReason() {
-	}
+  public ErrorReason() {}
 
-	public ErrorReason(byte[] code) {
-		super(code);
-	}
+  public ErrorReason(byte[] code) {
+    super(code);
+  }
 
-	public ErrorReason(BigInteger value) {
-		super(value);
-	}
+  public ErrorReason(BigInteger value) {
+    super(value);
+  }
 
-	public ErrorReason(long value) {
-		super(value);
-	}
-
+  public ErrorReason(long value) {
+    super(value);
+  }
 }

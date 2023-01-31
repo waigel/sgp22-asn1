@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class NotificationEvent extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public NotificationEvent() {
-	}
+  public NotificationEvent() {}
 
-	public NotificationEvent(byte[] code) {
-		super(code);
-	}
+  public NotificationEvent(byte[] code) {
+    super(code);
+  }
 
-	public NotificationEvent(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public NotificationEvent(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public NotificationEvent(boolean[] value) {
-		super(value);
-	}
-
+  public NotificationEvent(boolean[] value) {
+    super(value);
+  }
 }

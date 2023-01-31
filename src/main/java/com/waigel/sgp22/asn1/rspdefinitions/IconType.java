@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class IconType extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public IconType() {
-	}
+  public IconType() {}
 
-	public IconType(byte[] code) {
-		super(code);
-	}
+  public IconType(byte[] code) {
+    super(code);
+  }
 
-	public IconType(BigInteger value) {
-		super(value);
-	}
+  public IconType(BigInteger value) {
+    super(value);
+  }
 
-	public IconType(long value) {
-		super(value);
-	}
-
+  public IconType(long value) {
+    super(value);
+  }
 }

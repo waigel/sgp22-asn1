@@ -8,17 +8,15 @@ import com.beanit.asn1bean.ber.types.BerObjectIdentifier;
 
 public class KeyPurposeId extends BerObjectIdentifier {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public KeyPurposeId() {
-	}
+  public KeyPurposeId() {}
 
-	public KeyPurposeId(byte[] code) {
-		super(code);
-	}
+  public KeyPurposeId(byte[] code) {
+    super(code);
+  }
 
-	public KeyPurposeId(int[] value) {
-		super(value);
-	}
-
+  public KeyPurposeId(int[] value) {
+    super(value);
+  }
 }

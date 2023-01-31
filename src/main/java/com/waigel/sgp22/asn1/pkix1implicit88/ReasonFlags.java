@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class ReasonFlags extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ReasonFlags() {
-	}
+  public ReasonFlags() {}
 
-	public ReasonFlags(byte[] code) {
-		super(code);
-	}
+  public ReasonFlags(byte[] code) {
+    super(code);
+  }
 
-	public ReasonFlags(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public ReasonFlags(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public ReasonFlags(boolean[] value) {
-		super(value);
-	}
-
+  public ReasonFlags(boolean[] value) {
+    super(value);
+  }
 }

@@ -15,142 +15,143 @@ import java.io.Serializable;
 
 public class LoadCRLResponse implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 53);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 53);
 
-	private LoadCRLResponseOk loadCRLResponseOk = null;
-	private LoadCRLResponseError loadCRLResponseError = null;
+  private LoadCRLResponseOk loadCRLResponseOk = null;
+  private LoadCRLResponseError loadCRLResponseError = null;
 
-	public LoadCRLResponse() {
-	}
+  public LoadCRLResponse() {}
 
-	public LoadCRLResponse(byte[] code) {
-		this.code = code;
-	}
+  public LoadCRLResponse(byte[] code) {
+    this.code = code;
+  }
 
-	public void setLoadCRLResponseOk(LoadCRLResponseOk loadCRLResponseOk) {
-		this.loadCRLResponseOk = loadCRLResponseOk;
-	}
+  public void setLoadCRLResponseOk(LoadCRLResponseOk loadCRLResponseOk) {
+    this.loadCRLResponseOk = loadCRLResponseOk;
+  }
 
-	public LoadCRLResponseOk getLoadCRLResponseOk() {
-		return loadCRLResponseOk;
-	}
+  public LoadCRLResponseOk getLoadCRLResponseOk() {
+    return loadCRLResponseOk;
+  }
 
-	public void setLoadCRLResponseError(LoadCRLResponseError loadCRLResponseError) {
-		this.loadCRLResponseError = loadCRLResponseError;
-	}
+  public void setLoadCRLResponseError(LoadCRLResponseError loadCRLResponseError) {
+    this.loadCRLResponseError = loadCRLResponseError;
+  }
 
-	public LoadCRLResponseError getLoadCRLResponseError() {
-		return loadCRLResponseError;
-	}
+  public LoadCRLResponseError getLoadCRLResponseError() {
+    return loadCRLResponseError;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (loadCRLResponseError != null) {
-			codeLength += loadCRLResponseError.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 1
-			reverseOS.write(0x81);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (loadCRLResponseOk != null) {
-			codeLength += loadCRLResponseOk.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (loadCRLResponseError != null) {
+      codeLength += loadCRLResponseError.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 1
+      reverseOS.write(0x81);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (loadCRLResponseOk != null) {
+      codeLength += loadCRLResponseOk.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			loadCRLResponseOk = new LoadCRLResponseOk();
-			tlvByteCount += loadCRLResponseOk.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
-			loadCRLResponseError = new LoadCRLResponseError();
-			tlvByteCount += loadCRLResponseError.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      loadCRLResponseOk = new LoadCRLResponseOk();
+      tlvByteCount += loadCRLResponseOk.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
+      loadCRLResponseError = new LoadCRLResponseError();
+      tlvByteCount += loadCRLResponseError.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (loadCRLResponseOk != null) {
-			sb.append("loadCRLResponseOk: ");
-			loadCRLResponseOk.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (loadCRLResponseError != null) {
-			sb.append("loadCRLResponseError: ").append(loadCRLResponseError);
-			return;
-		}
+    if (loadCRLResponseOk != null) {
+      sb.append("loadCRLResponseOk: ");
+      loadCRLResponseOk.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (loadCRLResponseError != null) {
+      sb.append("loadCRLResponseError: ").append(loadCRLResponseError);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class PartialCrlNumber extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PartialCrlNumber() {
-	}
+  public PartialCrlNumber() {}
 
-	public PartialCrlNumber(byte[] code) {
-		super(code);
-	}
+  public PartialCrlNumber(byte[] code) {
+    super(code);
+  }
 
-	public PartialCrlNumber(BigInteger value) {
-		super(value);
-	}
+  public PartialCrlNumber(BigInteger value) {
+    super(value);
+  }
 
-	public PartialCrlNumber(long value) {
-		super(value);
-	}
-
+  public PartialCrlNumber(long value) {
+    super(value);
+  }
 }

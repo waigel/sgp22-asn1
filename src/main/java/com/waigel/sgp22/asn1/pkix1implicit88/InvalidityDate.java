@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.BerGeneralizedTime;
 
 public class InvalidityDate extends BerGeneralizedTime {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InvalidityDate() {
-	}
+  public InvalidityDate() {}
 
-	public InvalidityDate(byte[] value) {
-		super(value);
-	}
-
+  public InvalidityDate(byte[] value) {
+    super(value);
+  }
 }

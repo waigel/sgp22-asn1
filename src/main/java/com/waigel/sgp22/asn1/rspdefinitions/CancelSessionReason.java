@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class CancelSessionReason extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CancelSessionReason() {
-	}
+  public CancelSessionReason() {}
 
-	public CancelSessionReason(byte[] code) {
-		super(code);
-	}
+  public CancelSessionReason(byte[] code) {
+    super(code);
+  }
 
-	public CancelSessionReason(BigInteger value) {
-		super(value);
-	}
+  public CancelSessionReason(BigInteger value) {
+    super(value);
+  }
 
-	public CancelSessionReason(long value) {
-		super(value);
-	}
-
+  public CancelSessionReason(long value) {
+    super(value);
+  }
 }

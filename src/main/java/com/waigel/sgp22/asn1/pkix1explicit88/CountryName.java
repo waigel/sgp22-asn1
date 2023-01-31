@@ -15,138 +15,138 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class CountryName implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.APPLICATION_CLASS, BerTag.CONSTRUCTED, 1);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.APPLICATION_CLASS, BerTag.CONSTRUCTED, 1);
 
-	private BerNumericString x121DccCode = null;
-	private BerPrintableString iso3166Alpha2Code = null;
+  private BerNumericString x121DccCode = null;
+  private BerPrintableString iso3166Alpha2Code = null;
 
-	public CountryName() {
-	}
+  public CountryName() {}
 
-	public CountryName(byte[] code) {
-		this.code = code;
-	}
+  public CountryName(byte[] code) {
+    this.code = code;
+  }
 
-	public void setX121DccCode(BerNumericString x121DccCode) {
-		this.x121DccCode = x121DccCode;
-	}
+  public void setX121DccCode(BerNumericString x121DccCode) {
+    this.x121DccCode = x121DccCode;
+  }
 
-	public BerNumericString getX121DccCode() {
-		return x121DccCode;
-	}
+  public BerNumericString getX121DccCode() {
+    return x121DccCode;
+  }
 
-	public void setIso3166Alpha2Code(BerPrintableString iso3166Alpha2Code) {
-		this.iso3166Alpha2Code = iso3166Alpha2Code;
-	}
+  public void setIso3166Alpha2Code(BerPrintableString iso3166Alpha2Code) {
+    this.iso3166Alpha2Code = iso3166Alpha2Code;
+  }
 
-	public BerPrintableString getIso3166Alpha2Code() {
-		return iso3166Alpha2Code;
-	}
+  public BerPrintableString getIso3166Alpha2Code() {
+    return iso3166Alpha2Code;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (iso3166Alpha2Code != null) {
-			codeLength += iso3166Alpha2Code.encode(reverseOS, true);
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (x121DccCode != null) {
-			codeLength += x121DccCode.encode(reverseOS, true);
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (iso3166Alpha2Code != null) {
+      codeLength += iso3166Alpha2Code.encode(reverseOS, true);
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (x121DccCode != null) {
+      codeLength += x121DccCode.encode(reverseOS, true);
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerNumericString.tag)) {
-			x121DccCode = new BerNumericString();
-			tlvByteCount += x121DccCode.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerPrintableString.tag)) {
-			iso3166Alpha2Code = new BerPrintableString();
-			tlvByteCount += iso3166Alpha2Code.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerNumericString.tag)) {
+      x121DccCode = new BerNumericString();
+      tlvByteCount += x121DccCode.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerPrintableString.tag)) {
+      iso3166Alpha2Code = new BerPrintableString();
+      tlvByteCount += iso3166Alpha2Code.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (x121DccCode != null) {
-			sb.append("x121DccCode: ").append(x121DccCode);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (iso3166Alpha2Code != null) {
-			sb.append("iso3166Alpha2Code: ").append(iso3166Alpha2Code);
-			return;
-		}
+    if (x121DccCode != null) {
+      sb.append("x121DccCode: ").append(x121DccCode);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (iso3166Alpha2Code != null) {
+      sb.append("iso3166Alpha2Code: ").append(iso3166Alpha2Code);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

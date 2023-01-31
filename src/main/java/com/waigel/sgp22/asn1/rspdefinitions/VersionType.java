@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.BerOctetString;
 
 public class VersionType extends BerOctetString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public VersionType() {
-	}
+  public VersionType() {}
 
-	public VersionType(byte[] value) {
-		super(value);
-	}
-
+  public VersionType(byte[] value) {
+    super(value);
+  }
 }

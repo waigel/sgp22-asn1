@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerIA5String;
 
-
 public class DomainComponent extends BerIA5String {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DomainComponent() {
-	}
+  public DomainComponent() {}
 
-	public DomainComponent(byte[] value) {
-		super(value);
-	}
-
+  public DomainComponent(byte[] value) {
+    super(value);
+  }
 }

@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerPrintableString;
 
-
 public class OrganizationalUnitName extends BerPrintableString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public OrganizationalUnitName() {
-	}
+  public OrganizationalUnitName() {}
 
-	public OrganizationalUnitName(byte[] value) {
-		super(value);
-	}
-
+  public OrganizationalUnitName(byte[] value) {
+    super(value);
+  }
 }

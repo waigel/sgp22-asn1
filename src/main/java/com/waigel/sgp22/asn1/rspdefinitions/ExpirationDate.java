@@ -8,13 +8,11 @@ import com.waigel.sgp22.asn1.pkix1explicit88.Time;
 
 public class ExpirationDate extends Time {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ExpirationDate() {
-	}
+  public ExpirationDate() {}
 
-	public ExpirationDate(byte[] code) {
-		super(code);
-	}
-
+  public ExpirationDate(byte[] code) {
+    super(code);
+  }
 }

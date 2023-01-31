@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class CRLReason extends BerEnum {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CRLReason() {
-	}
+  public CRLReason() {}
 
-	public CRLReason(byte[] code) {
-		super(code);
-	}
+  public CRLReason(byte[] code) {
+    super(code);
+  }
 
-	public CRLReason(BigInteger value) {
-		super(value);
-	}
+  public CRLReason(BigInteger value) {
+    super(value);
+  }
 
-	public CRLReason(long value) {
-		super(value);
-	}
-
+  public CRLReason(long value) {
+    super(value);
+  }
 }

@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class PprIds extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PprIds() {
-	}
+  public PprIds() {}
 
-	public PprIds(byte[] code) {
-		super(code);
-	}
+  public PprIds(byte[] code) {
+    super(code);
+  }
 
-	public PprIds(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public PprIds(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public PprIds(boolean[] value) {
-		super(value);
-	}
-
+  public PprIds(boolean[] value) {
+    super(value);
+  }
 }

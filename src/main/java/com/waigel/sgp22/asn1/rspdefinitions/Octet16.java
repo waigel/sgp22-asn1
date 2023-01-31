@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.BerOctetString;
 
 public class Octet16 extends BerOctetString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public Octet16() {
-	}
+  public Octet16() {}
 
-	public Octet16(byte[] value) {
-		super(value);
-	}
-
+  public Octet16(byte[] value) {
+    super(value);
+  }
 }

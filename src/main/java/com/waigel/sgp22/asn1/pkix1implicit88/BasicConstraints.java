@@ -17,165 +17,165 @@ import java.io.Serializable;
 
 public class BasicConstraints implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 16);
+  public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 16);
 
-	private byte[] code = null;
-	private BerBoolean cA = null;
-	private BerInteger pathLenConstraint = null;
+  private byte[] code = null;
+  private BerBoolean cA = null;
+  private BerInteger pathLenConstraint = null;
 
-	public BasicConstraints() {
-	}
+  public BasicConstraints() {}
 
-	public BasicConstraints(byte[] code) {
-		this.code = code;
-	}
+  public BasicConstraints(byte[] code) {
+    this.code = code;
+  }
 
-	public void setCA(BerBoolean cA) {
-		this.cA = cA;
-	}
+  public void setCA(BerBoolean cA) {
+    this.cA = cA;
+  }
 
-	public BerBoolean getCA() {
-		return cA;
-	}
+  public BerBoolean getCA() {
+    return cA;
+  }
 
-	public void setPathLenConstraint(BerInteger pathLenConstraint) {
-		this.pathLenConstraint = pathLenConstraint;
-	}
+  public void setPathLenConstraint(BerInteger pathLenConstraint) {
+    this.pathLenConstraint = pathLenConstraint;
+  }
 
-	public BerInteger getPathLenConstraint() {
-		return pathLenConstraint;
-	}
+  public BerInteger getPathLenConstraint() {
+    return pathLenConstraint;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (pathLenConstraint != null) {
-			codeLength += pathLenConstraint.encode(reverseOS, true);
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (cA != null) {
-			codeLength += cA.encode(reverseOS, true);
-		}
+    int codeLength = 0;
+    if (pathLenConstraint != null) {
+      codeLength += pathLenConstraint.encode(reverseOS, true);
+    }
 
-		codeLength += BerLength.encodeLength(reverseOS, codeLength);
+    if (cA != null) {
+      codeLength += cA.encode(reverseOS, true);
+    }
 
-		if (withTag) {
-			codeLength += tag.encode(reverseOS);
-		}
+    codeLength += BerLength.encodeLength(reverseOS, codeLength);
 
-		return codeLength;
+    if (withTag) {
+      codeLength += tag.encode(reverseOS);
+    }
 
-	}
+    return codeLength;
+  }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlByteCount = 0;
-		int vByteCount = 0;
-		BerTag berTag = new BerTag();
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlByteCount = 0;
+    int vByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		if (withTag) {
-			tlByteCount += tag.decodeAndCheck(is);
-		}
+    if (withTag) {
+      tlByteCount += tag.decodeAndCheck(is);
+    }
 
-		BerLength length = new BerLength();
-		tlByteCount += length.decode(is);
-		int lengthVal = length.val;
-		if (lengthVal == 0) {
-			return tlByteCount;
-		}
-		vByteCount += berTag.decode(is);
+    BerLength length = new BerLength();
+    tlByteCount += length.decode(is);
+    int lengthVal = length.val;
+    if (lengthVal == 0) {
+      return tlByteCount;
+    }
+    vByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerBoolean.tag)) {
-			cA = new BerBoolean();
-			vByteCount += cA.decode(is, false);
-			if (lengthVal >= 0 && vByteCount == lengthVal) {
-				return tlByteCount + vByteCount;
-			}
-			vByteCount += berTag.decode(is);
-		}
+    if (berTag.equals(BerBoolean.tag)) {
+      cA = new BerBoolean();
+      vByteCount += cA.decode(is, false);
+      if (lengthVal >= 0 && vByteCount == lengthVal) {
+        return tlByteCount + vByteCount;
+      }
+      vByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerInteger.tag)) {
-			pathLenConstraint = new BerInteger();
-			vByteCount += pathLenConstraint.decode(is, false);
-			if (lengthVal >= 0 && vByteCount == lengthVal) {
-				return tlByteCount + vByteCount;
-			}
-			vByteCount += berTag.decode(is);
-		}
+    if (berTag.equals(BerInteger.tag)) {
+      pathLenConstraint = new BerInteger();
+      vByteCount += pathLenConstraint.decode(is, false);
+      if (lengthVal >= 0 && vByteCount == lengthVal) {
+        return tlByteCount + vByteCount;
+      }
+      vByteCount += berTag.decode(is);
+    }
 
-		if (lengthVal < 0) {
-			if (!berTag.equals(0, 0, 0)) {
-				throw new IOException("Decoded sequence has wrong end of contents octets");
-			}
-			vByteCount += BerLength.readEocByte(is);
-			return tlByteCount + vByteCount;
-		}
+    if (lengthVal < 0) {
+      if (!berTag.equals(0, 0, 0)) {
+        throw new IOException("Decoded sequence has wrong end of contents octets");
+      }
+      vByteCount += BerLength.readEocByte(is);
+      return tlByteCount + vByteCount;
+    }
 
-		throw new IOException("Unexpected end of sequence, length tag: " + lengthVal + ", bytes decoded: " + vByteCount);
+    throw new IOException(
+        "Unexpected end of sequence, length tag: " + lengthVal + ", bytes decoded: " + vByteCount);
+  }
 
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+    sb.append("{");
+    boolean firstSelectedElement = true;
+    if (cA != null) {
+      sb.append("\n");
+      for (int i = 0; i < indentLevel + 1; i++) {
+        sb.append("\t");
+      }
+      sb.append("cA: ").append(cA);
+      firstSelectedElement = false;
+    }
 
-		sb.append("{");
-		boolean firstSelectedElement = true;
-		if (cA != null) {
-			sb.append("\n");
-			for (int i = 0; i < indentLevel + 1; i++) {
-				sb.append("\t");
-			}
-			sb.append("cA: ").append(cA);
-			firstSelectedElement = false;
-		}
+    if (pathLenConstraint != null) {
+      if (!firstSelectedElement) {
+        sb.append(",\n");
+      }
+      for (int i = 0; i < indentLevel + 1; i++) {
+        sb.append("\t");
+      }
+      sb.append("pathLenConstraint: ").append(pathLenConstraint);
+    }
 
-		if (pathLenConstraint != null) {
-			if (!firstSelectedElement) {
-				sb.append(",\n");
-			}
-			for (int i = 0; i < indentLevel + 1; i++) {
-				sb.append("\t");
-			}
-			sb.append("pathLenConstraint: ").append(pathLenConstraint);
-		}
-
-		sb.append("\n");
-		for (int i = 0; i < indentLevel; i++) {
-			sb.append("\t");
-		}
-		sb.append("}");
-	}
-
+    sb.append("\n");
+    for (int i = 0; i < indentLevel; i++) {
+      sb.append("\t");
+    }
+    sb.append("}");
+  }
 }
-

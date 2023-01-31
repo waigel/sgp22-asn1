@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class CRLNumber extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CRLNumber() {
-	}
+  public CRLNumber() {}
 
-	public CRLNumber(byte[] code) {
-		super(code);
-	}
+  public CRLNumber(byte[] code) {
+    super(code);
+  }
 
-	public CRLNumber(BigInteger value) {
-		super(value);
-	}
+  public CRLNumber(BigInteger value) {
+    super(value);
+  }
 
-	public CRLNumber(long value) {
-		super(value);
-	}
-
+  public CRLNumber(long value) {
+    super(value);
+  }
 }

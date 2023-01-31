@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class UICCCapability extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public UICCCapability() {
-	}
+  public UICCCapability() {}
 
-	public UICCCapability(byte[] code) {
-		super(code);
-	}
+  public UICCCapability(byte[] code) {
+    super(code);
+  }
 
-	public UICCCapability(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public UICCCapability(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public UICCCapability(boolean[] value) {
-		super(value);
-	}
-
+  public UICCCapability(boolean[] value) {
+    super(value);
+  }
 }

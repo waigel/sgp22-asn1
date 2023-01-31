@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class ProfileClass extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ProfileClass() {
-	}
+  public ProfileClass() {}
 
-	public ProfileClass(byte[] code) {
-		super(code);
-	}
+  public ProfileClass(byte[] code) {
+    super(code);
+  }
 
-	public ProfileClass(BigInteger value) {
-		super(value);
-	}
+  public ProfileClass(BigInteger value) {
+    super(value);
+  }
 
-	public ProfileClass(long value) {
-		super(value);
-	}
-
+  public ProfileClass(long value) {
+    super(value);
+  }
 }

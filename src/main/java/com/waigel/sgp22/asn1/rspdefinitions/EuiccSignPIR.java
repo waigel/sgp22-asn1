@@ -12,42 +12,40 @@ import java.io.OutputStream;
 
 public class EuiccSignPIR extends BerOctetString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final BerTag tag = new BerTag(BerTag.APPLICATION_CLASS, BerTag.PRIMITIVE, 55);
+  public static final BerTag tag = new BerTag(BerTag.APPLICATION_CLASS, BerTag.PRIMITIVE, 55);
 
-	public EuiccSignPIR() {
-	}
+  public EuiccSignPIR() {}
 
-	public EuiccSignPIR(byte[] value) {
-		super(value);
-	}
+  public EuiccSignPIR(byte[] value) {
+    super(value);
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength;
+    int codeLength;
 
-		codeLength = super.encode(reverseOS, false);
-		if (withTag) {
-			codeLength += tag.encode(reverseOS);
-		}
+    codeLength = super.encode(reverseOS, false);
+    if (withTag) {
+      codeLength += tag.encode(reverseOS);
+    }
 
-		return codeLength;
-	}
+    return codeLength;
+  }
 
-	@Override
-	public int decode(InputStream is, boolean withTag) throws IOException {
+  @Override
+  public int decode(InputStream is, boolean withTag) throws IOException {
 
-		int codeLength = 0;
+    int codeLength = 0;
 
-		if (withTag) {
-			codeLength += tag.decodeAndCheck(is);
-		}
+    if (withTag) {
+      codeLength += tag.decodeAndCheck(is);
+    }
 
-		codeLength += super.decode(is, false);
+    codeLength += super.decode(is, false);
 
-		return codeLength;
-	}
-
+    return codeLength;
+  }
 }

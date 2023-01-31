@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.BerOctetString;
 
 public class TransactionId extends BerOctetString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public TransactionId() {
-	}
+  public TransactionId() {}
 
-	public TransactionId(byte[] value) {
-		super(value);
-	}
-
+  public TransactionId(byte[] value) {
+    super(value);
+  }
 }

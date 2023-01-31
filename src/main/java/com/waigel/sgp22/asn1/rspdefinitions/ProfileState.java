@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class ProfileState extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ProfileState() {
-	}
+  public ProfileState() {}
 
-	public ProfileState(byte[] code) {
-		super(code);
-	}
+  public ProfileState(byte[] code) {
+    super(code);
+  }
 
-	public ProfileState(BigInteger value) {
-		super(value);
-	}
+  public ProfileState(BigInteger value) {
+    super(value);
+  }
 
-	public ProfileState(long value) {
-		super(value);
-	}
-
+  public ProfileState(long value) {
+    super(value);
+  }
 }

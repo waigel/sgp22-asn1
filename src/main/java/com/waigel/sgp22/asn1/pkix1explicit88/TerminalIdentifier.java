@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerPrintableString;
 
-
 public class TerminalIdentifier extends BerPrintableString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public TerminalIdentifier() {
-	}
+  public TerminalIdentifier() {}
 
-	public TerminalIdentifier(byte[] value) {
-		super(value);
-	}
-
+  public TerminalIdentifier(byte[] value) {
+    super(value);
+  }
 }

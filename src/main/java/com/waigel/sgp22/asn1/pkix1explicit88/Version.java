@@ -7,24 +7,21 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 import com.beanit.asn1bean.ber.types.BerInteger;
 import java.math.BigInteger;
 
-
 public class Version extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public Version() {
-	}
+  public Version() {}
 
-	public Version(byte[] code) {
-		super(code);
-	}
+  public Version(byte[] code) {
+    super(code);
+  }
 
-	public Version(BigInteger value) {
-		super(value);
-	}
+  public Version(BigInteger value) {
+    super(value);
+  }
 
-	public Version(long value) {
-		super(value);
-	}
-
+  public Version(long value) {
+    super(value);
+  }
 }

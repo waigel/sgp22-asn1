@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class DownloadErrorCode extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DownloadErrorCode() {
-	}
+  public DownloadErrorCode() {}
 
-	public DownloadErrorCode(byte[] code) {
-		super(code);
-	}
+  public DownloadErrorCode(byte[] code) {
+    super(code);
+  }
 
-	public DownloadErrorCode(BigInteger value) {
-		super(value);
-	}
+  public DownloadErrorCode(BigInteger value) {
+    super(value);
+  }
 
-	public DownloadErrorCode(long value) {
-		super(value);
-	}
-
+  public DownloadErrorCode(long value) {
+    super(value);
+  }
 }

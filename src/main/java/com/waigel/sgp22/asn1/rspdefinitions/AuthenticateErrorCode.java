@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class AuthenticateErrorCode extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public AuthenticateErrorCode() {
-	}
+  public AuthenticateErrorCode() {}
 
-	public AuthenticateErrorCode(byte[] code) {
-		super(code);
-	}
+  public AuthenticateErrorCode(byte[] code) {
+    super(code);
+  }
 
-	public AuthenticateErrorCode(BigInteger value) {
-		super(value);
-	}
+  public AuthenticateErrorCode(BigInteger value) {
+    super(value);
+  }
 
-	public AuthenticateErrorCode(long value) {
-		super(value);
-	}
-
+  public AuthenticateErrorCode(long value) {
+    super(value);
+  }
 }

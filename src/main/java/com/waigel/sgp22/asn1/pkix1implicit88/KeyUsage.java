@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class KeyUsage extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public KeyUsage() {
-	}
+  public KeyUsage() {}
 
-	public KeyUsage(byte[] code) {
-		super(code);
-	}
+  public KeyUsage(byte[] code) {
+    super(code);
+  }
 
-	public KeyUsage(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public KeyUsage(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public KeyUsage(boolean[] value) {
-		super(value);
-	}
-
+  public KeyUsage(boolean[] value) {
+    super(value);
+  }
 }

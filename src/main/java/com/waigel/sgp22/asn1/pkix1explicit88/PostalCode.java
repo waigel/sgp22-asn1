@@ -14,121 +14,121 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class PostalCode implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private BerNumericString numericCode = null;
-	private BerPrintableString printableCode = null;
+  private byte[] code = null;
+  private BerNumericString numericCode = null;
+  private BerPrintableString printableCode = null;
 
-	public PostalCode() {
-	}
+  public PostalCode() {}
 
-	public PostalCode(byte[] code) {
-		this.code = code;
-	}
+  public PostalCode(byte[] code) {
+    this.code = code;
+  }
 
-	public void setNumericCode(BerNumericString numericCode) {
-		this.numericCode = numericCode;
-	}
+  public void setNumericCode(BerNumericString numericCode) {
+    this.numericCode = numericCode;
+  }
 
-	public BerNumericString getNumericCode() {
-		return numericCode;
-	}
+  public BerNumericString getNumericCode() {
+    return numericCode;
+  }
 
-	public void setPrintableCode(BerPrintableString printableCode) {
-		this.printableCode = printableCode;
-	}
+  public void setPrintableCode(BerPrintableString printableCode) {
+    this.printableCode = printableCode;
+  }
 
-	public BerPrintableString getPrintableCode() {
-		return printableCode;
-	}
+  public BerPrintableString getPrintableCode() {
+    return printableCode;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (printableCode != null) {
-			codeLength += printableCode.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (numericCode != null) {
-			codeLength += numericCode.encode(reverseOS, true);
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (printableCode != null) {
+      codeLength += printableCode.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (numericCode != null) {
+      codeLength += numericCode.encode(reverseOS, true);
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerNumericString.tag)) {
-			numericCode = new BerNumericString();
-			tlvByteCount += numericCode.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerPrintableString.tag)) {
-			printableCode = new BerPrintableString();
-			tlvByteCount += printableCode.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerNumericString.tag)) {
+      numericCode = new BerNumericString();
+      tlvByteCount += numericCode.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerPrintableString.tag)) {
+      printableCode = new BerPrintableString();
+      tlvByteCount += printableCode.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (numericCode != null) {
-			sb.append("numericCode: ").append(numericCode);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (printableCode != null) {
-			sb.append("printableCode: ").append(printableCode);
-			return;
-		}
+    if (numericCode != null) {
+      sb.append("numericCode: ").append(numericCode);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (printableCode != null) {
+      sb.append("printableCode: ").append(printableCode);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

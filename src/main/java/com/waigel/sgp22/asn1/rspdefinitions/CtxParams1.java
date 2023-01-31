@@ -14,97 +14,99 @@ import java.io.Serializable;
 
 public class CtxParams1 implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private CtxParamsForCommonAuthentication ctxParamsForCommonAuthentication = null;
+  private byte[] code = null;
+  private CtxParamsForCommonAuthentication ctxParamsForCommonAuthentication = null;
 
-	public CtxParams1() {
-	}
+  public CtxParams1() {}
 
-	public CtxParams1(byte[] code) {
-		this.code = code;
-	}
+  public CtxParams1(byte[] code) {
+    this.code = code;
+  }
 
-	public void setCtxParamsForCommonAuthentication(CtxParamsForCommonAuthentication ctxParamsForCommonAuthentication) {
-		this.ctxParamsForCommonAuthentication = ctxParamsForCommonAuthentication;
-	}
+  public void setCtxParamsForCommonAuthentication(
+      CtxParamsForCommonAuthentication ctxParamsForCommonAuthentication) {
+    this.ctxParamsForCommonAuthentication = ctxParamsForCommonAuthentication;
+  }
 
-	public CtxParamsForCommonAuthentication getCtxParamsForCommonAuthentication() {
-		return ctxParamsForCommonAuthentication;
-	}
+  public CtxParamsForCommonAuthentication getCtxParamsForCommonAuthentication() {
+    return ctxParamsForCommonAuthentication;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (ctxParamsForCommonAuthentication != null) {
-			codeLength += ctxParamsForCommonAuthentication.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    int codeLength = 0;
+    if (ctxParamsForCommonAuthentication != null) {
+      codeLength += ctxParamsForCommonAuthentication.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			ctxParamsForCommonAuthentication = new CtxParamsForCommonAuthentication();
-			tlvByteCount += ctxParamsForCommonAuthentication.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      ctxParamsForCommonAuthentication = new CtxParamsForCommonAuthentication();
+      tlvByteCount += ctxParamsForCommonAuthentication.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (ctxParamsForCommonAuthentication != null) {
-			sb.append("ctxParamsForCommonAuthentication: ");
-			ctxParamsForCommonAuthentication.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		sb.append("<none>");
-	}
+    if (ctxParamsForCommonAuthentication != null) {
+      sb.append("ctxParamsForCommonAuthentication: ");
+      ctxParamsForCommonAuthentication.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

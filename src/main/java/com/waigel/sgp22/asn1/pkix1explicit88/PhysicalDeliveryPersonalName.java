@@ -4,16 +4,13 @@
 
 package com.waigel.sgp22.asn1.pkix1explicit88;
 
-
 public class PhysicalDeliveryPersonalName extends PDSParameter {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PhysicalDeliveryPersonalName() {
-	}
+  public PhysicalDeliveryPersonalName() {}
 
-	public PhysicalDeliveryPersonalName(byte[] code) {
-		super(code);
-	}
-
+  public PhysicalDeliveryPersonalName(byte[] code) {
+    super(code);
+  }
 }

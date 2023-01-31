@@ -16,142 +16,143 @@ import java.io.Serializable;
 
 public class GetBoundProfilePackageResponse implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58);
 
-	private GetBoundProfilePackageOk getBoundProfilePackageOk = null;
-	private BerInteger getBoundProfilePackageError = null;
+  private GetBoundProfilePackageOk getBoundProfilePackageOk = null;
+  private BerInteger getBoundProfilePackageError = null;
 
-	public GetBoundProfilePackageResponse() {
-	}
+  public GetBoundProfilePackageResponse() {}
 
-	public GetBoundProfilePackageResponse(byte[] code) {
-		this.code = code;
-	}
+  public GetBoundProfilePackageResponse(byte[] code) {
+    this.code = code;
+  }
 
-	public void setGetBoundProfilePackageOk(GetBoundProfilePackageOk getBoundProfilePackageOk) {
-		this.getBoundProfilePackageOk = getBoundProfilePackageOk;
-	}
+  public void setGetBoundProfilePackageOk(GetBoundProfilePackageOk getBoundProfilePackageOk) {
+    this.getBoundProfilePackageOk = getBoundProfilePackageOk;
+  }
 
-	public GetBoundProfilePackageOk getGetBoundProfilePackageOk() {
-		return getBoundProfilePackageOk;
-	}
+  public GetBoundProfilePackageOk getGetBoundProfilePackageOk() {
+    return getBoundProfilePackageOk;
+  }
 
-	public void setGetBoundProfilePackageError(BerInteger getBoundProfilePackageError) {
-		this.getBoundProfilePackageError = getBoundProfilePackageError;
-	}
+  public void setGetBoundProfilePackageError(BerInteger getBoundProfilePackageError) {
+    this.getBoundProfilePackageError = getBoundProfilePackageError;
+  }
 
-	public BerInteger getGetBoundProfilePackageError() {
-		return getBoundProfilePackageError;
-	}
+  public BerInteger getGetBoundProfilePackageError() {
+    return getBoundProfilePackageError;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (getBoundProfilePackageError != null) {
-			codeLength += getBoundProfilePackageError.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 1
-			reverseOS.write(0x81);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (getBoundProfilePackageOk != null) {
-			codeLength += getBoundProfilePackageOk.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (getBoundProfilePackageError != null) {
+      codeLength += getBoundProfilePackageError.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 1
+      reverseOS.write(0x81);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (getBoundProfilePackageOk != null) {
+      codeLength += getBoundProfilePackageOk.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			getBoundProfilePackageOk = new GetBoundProfilePackageOk();
-			tlvByteCount += getBoundProfilePackageOk.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
-			getBoundProfilePackageError = new BerInteger();
-			tlvByteCount += getBoundProfilePackageError.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      getBoundProfilePackageOk = new GetBoundProfilePackageOk();
+      tlvByteCount += getBoundProfilePackageOk.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
+      getBoundProfilePackageError = new BerInteger();
+      tlvByteCount += getBoundProfilePackageError.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (getBoundProfilePackageOk != null) {
-			sb.append("getBoundProfilePackageOk: ");
-			getBoundProfilePackageOk.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (getBoundProfilePackageError != null) {
-			sb.append("getBoundProfilePackageError: ").append(getBoundProfilePackageError);
-			return;
-		}
+    if (getBoundProfilePackageOk != null) {
+      sb.append("getBoundProfilePackageOk: ");
+      getBoundProfilePackageOk.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (getBoundProfilePackageError != null) {
+      sb.append("getBoundProfilePackageError: ").append(getBoundProfilePackageError);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

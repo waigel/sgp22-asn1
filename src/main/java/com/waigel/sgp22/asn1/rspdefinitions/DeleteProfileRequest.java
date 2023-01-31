@@ -15,138 +15,139 @@ import java.io.Serializable;
 
 public class DeleteProfileRequest implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 51);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 51);
 
-	private OctetTo16 isdpAid = null;
-	private Iccid iccid = null;
+  private OctetTo16 isdpAid = null;
+  private Iccid iccid = null;
 
-	public DeleteProfileRequest() {
-	}
+  public DeleteProfileRequest() {}
 
-	public DeleteProfileRequest(byte[] code) {
-		this.code = code;
-	}
+  public DeleteProfileRequest(byte[] code) {
+    this.code = code;
+  }
 
-	public void setIsdpAid(OctetTo16 isdpAid) {
-		this.isdpAid = isdpAid;
-	}
+  public void setIsdpAid(OctetTo16 isdpAid) {
+    this.isdpAid = isdpAid;
+  }
 
-	public OctetTo16 getIsdpAid() {
-		return isdpAid;
-	}
+  public OctetTo16 getIsdpAid() {
+    return isdpAid;
+  }
 
-	public void setIccid(Iccid iccid) {
-		this.iccid = iccid;
-	}
+  public void setIccid(Iccid iccid) {
+    this.iccid = iccid;
+  }
 
-	public Iccid getIccid() {
-		return iccid;
-	}
+  public Iccid getIccid() {
+    return iccid;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (iccid != null) {
-			codeLength += iccid.encode(reverseOS, true);
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (isdpAid != null) {
-			codeLength += isdpAid.encode(reverseOS, false);
-			// write tag: APPLICATION_CLASS, PRIMITIVE, 15
-			reverseOS.write(0x4F);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (iccid != null) {
+      codeLength += iccid.encode(reverseOS, true);
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (isdpAid != null) {
+      codeLength += isdpAid.encode(reverseOS, false);
+      // write tag: APPLICATION_CLASS, PRIMITIVE, 15
+      reverseOS.write(0x4F);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.APPLICATION_CLASS, BerTag.PRIMITIVE, 15)) {
-			isdpAid = new OctetTo16();
-			tlvByteCount += isdpAid.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(Iccid.tag)) {
-			iccid = new Iccid();
-			tlvByteCount += iccid.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.APPLICATION_CLASS, BerTag.PRIMITIVE, 15)) {
+      isdpAid = new OctetTo16();
+      tlvByteCount += isdpAid.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(Iccid.tag)) {
+      iccid = new Iccid();
+      tlvByteCount += iccid.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (isdpAid != null) {
-			sb.append("isdpAid: ").append(isdpAid);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (iccid != null) {
-			sb.append("iccid: ").append(iccid);
-			return;
-		}
+    if (isdpAid != null) {
+      sb.append("isdpAid: ").append(isdpAid);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (iccid != null) {
+      sb.append("iccid: ").append(iccid);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.BerAny;
 
-
 public class AttributeValue extends BerAny {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public AttributeValue() {
-	}
+  public AttributeValue() {}
 
-	public AttributeValue(byte[] value) {
-		super(value);
-	}
-
+  public AttributeValue(byte[] value) {
+    super(value);
+  }
 }

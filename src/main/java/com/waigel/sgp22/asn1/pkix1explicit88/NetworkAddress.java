@@ -4,16 +4,13 @@
 
 package com.waigel.sgp22.asn1.pkix1explicit88;
 
-
 public class NetworkAddress extends X121Address {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public NetworkAddress() {
-	}
+  public NetworkAddress() {}
 
-	public NetworkAddress(byte[] value) {
-		super(value);
-	}
-
+  public NetworkAddress(byte[] value) {
+    super(value);
+  }
 }

@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerNumericString;
 
-
 public class X121Address extends BerNumericString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public X121Address() {
-	}
+  public X121Address() {}
 
-	public X121Address(byte[] value) {
-		super(value);
-	}
-
+  public X121Address(byte[] value) {
+    super(value);
+  }
 }

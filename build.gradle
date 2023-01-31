@@ -12,17 +12,18 @@ configurations {
 }
 
 group = 'com.waigel.sgp22.asn1'
-version = '1.0.0'
+version = '1.0.1'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    tool 'com.beanit:asn1bean-compiler:1.13.0'
+    tool 'com.github.waigel:asn1bean:4587827'
     implementation 'com.beanit:asn1bean:1.13.0'
 }
 

@@ -6,16 +6,13 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.string.BerNumericString;
 
-
 public class NumericUserIdentifier extends BerNumericString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public NumericUserIdentifier() {
-	}
+  public NumericUserIdentifier() {}
 
-	public NumericUserIdentifier(byte[] value) {
-		super(value);
-	}
-
+  public NumericUserIdentifier(byte[] value) {
+    super(value);
+  }
 }

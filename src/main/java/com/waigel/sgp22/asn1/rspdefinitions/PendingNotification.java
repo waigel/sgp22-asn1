@@ -14,124 +14,125 @@ import java.io.Serializable;
 
 public class PendingNotification implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private ProfileInstallationResult profileInstallationResult = null;
-	private OtherSignedNotification otherSignedNotification = null;
+  private byte[] code = null;
+  private ProfileInstallationResult profileInstallationResult = null;
+  private OtherSignedNotification otherSignedNotification = null;
 
-	public PendingNotification() {
-	}
+  public PendingNotification() {}
 
-	public PendingNotification(byte[] code) {
-		this.code = code;
-	}
+  public PendingNotification(byte[] code) {
+    this.code = code;
+  }
 
-	public void setProfileInstallationResult(ProfileInstallationResult profileInstallationResult) {
-		this.profileInstallationResult = profileInstallationResult;
-	}
+  public void setProfileInstallationResult(ProfileInstallationResult profileInstallationResult) {
+    this.profileInstallationResult = profileInstallationResult;
+  }
 
-	public ProfileInstallationResult getProfileInstallationResult() {
-		return profileInstallationResult;
-	}
+  public ProfileInstallationResult getProfileInstallationResult() {
+    return profileInstallationResult;
+  }
 
-	public void setOtherSignedNotification(OtherSignedNotification otherSignedNotification) {
-		this.otherSignedNotification = otherSignedNotification;
-	}
+  public void setOtherSignedNotification(OtherSignedNotification otherSignedNotification) {
+    this.otherSignedNotification = otherSignedNotification;
+  }
 
-	public OtherSignedNotification getOtherSignedNotification() {
-		return otherSignedNotification;
-	}
+  public OtherSignedNotification getOtherSignedNotification() {
+    return otherSignedNotification;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (otherSignedNotification != null) {
-			codeLength += otherSignedNotification.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (profileInstallationResult != null) {
-			codeLength += profileInstallationResult.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 55
-			reverseOS.write(0x37);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (otherSignedNotification != null) {
+      codeLength += otherSignedNotification.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (profileInstallationResult != null) {
+      codeLength += profileInstallationResult.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 55
+      reverseOS.write(0x37);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 55)) {
-			profileInstallationResult = new ProfileInstallationResult();
-			tlvByteCount += profileInstallationResult.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(OtherSignedNotification.tag)) {
-			otherSignedNotification = new OtherSignedNotification();
-			tlvByteCount += otherSignedNotification.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 55)) {
+      profileInstallationResult = new ProfileInstallationResult();
+      tlvByteCount += profileInstallationResult.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(OtherSignedNotification.tag)) {
+      otherSignedNotification = new OtherSignedNotification();
+      tlvByteCount += otherSignedNotification.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (profileInstallationResult != null) {
-			sb.append("profileInstallationResult: ");
-			profileInstallationResult.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (otherSignedNotification != null) {
-			sb.append("otherSignedNotification: ");
-			otherSignedNotification.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (profileInstallationResult != null) {
+      sb.append("profileInstallationResult: ");
+      profileInstallationResult.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (otherSignedNotification != null) {
+      sb.append("otherSignedNotification: ");
+      otherSignedNotification.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

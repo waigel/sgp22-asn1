@@ -8,17 +8,15 @@ import com.beanit.asn1bean.ber.types.BerObjectIdentifier;
 
 public class CertPolicyId extends BerObjectIdentifier {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CertPolicyId() {
-	}
+  public CertPolicyId() {}
 
-	public CertPolicyId(byte[] code) {
-		super(code);
-	}
+  public CertPolicyId(byte[] code) {
+    super(code);
+  }
 
-	public CertPolicyId(int[] value) {
-		super(value);
-	}
-
+  public CertPolicyId(int[] value) {
+    super(value);
+  }
 }

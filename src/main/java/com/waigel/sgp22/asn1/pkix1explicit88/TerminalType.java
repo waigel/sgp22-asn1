@@ -7,24 +7,21 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 import com.beanit.asn1bean.ber.types.BerInteger;
 import java.math.BigInteger;
 
-
 public class TerminalType extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public TerminalType() {
-	}
+  public TerminalType() {}
 
-	public TerminalType(byte[] code) {
-		super(code);
-	}
+  public TerminalType(byte[] code) {
+    super(code);
+  }
 
-	public TerminalType(BigInteger value) {
-		super(value);
-	}
+  public TerminalType(BigInteger value) {
+    super(value);
+  }
 
-	public TerminalType(long value) {
-		super(value);
-	}
-
+  public TerminalType(long value) {
+    super(value);
+  }
 }

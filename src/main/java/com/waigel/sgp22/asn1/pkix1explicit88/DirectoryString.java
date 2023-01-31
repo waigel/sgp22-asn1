@@ -13,196 +13,196 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class DirectoryString implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private BerTeletexString teletexString = null;
-	private BerPrintableString printableString = null;
-	private BerUniversalString universalString = null;
-	private BerUTF8String utf8String = null;
-	private BerBMPString bmpString = null;
+  private byte[] code = null;
+  private BerTeletexString teletexString = null;
+  private BerPrintableString printableString = null;
+  private BerUniversalString universalString = null;
+  private BerUTF8String utf8String = null;
+  private BerBMPString bmpString = null;
 
-	public DirectoryString() {
-	}
+  public DirectoryString() {}
 
-	public DirectoryString(byte[] code) {
-		this.code = code;
-	}
+  public DirectoryString(byte[] code) {
+    this.code = code;
+  }
 
-	public void setTeletexString(BerTeletexString teletexString) {
-		this.teletexString = teletexString;
-	}
+  public void setTeletexString(BerTeletexString teletexString) {
+    this.teletexString = teletexString;
+  }
 
-	public BerTeletexString getTeletexString() {
-		return teletexString;
-	}
+  public BerTeletexString getTeletexString() {
+    return teletexString;
+  }
 
-	public void setPrintableString(BerPrintableString printableString) {
-		this.printableString = printableString;
-	}
+  public void setPrintableString(BerPrintableString printableString) {
+    this.printableString = printableString;
+  }
 
-	public BerPrintableString getPrintableString() {
-		return printableString;
-	}
+  public BerPrintableString getPrintableString() {
+    return printableString;
+  }
 
-	public void setUniversalString(BerUniversalString universalString) {
-		this.universalString = universalString;
-	}
+  public void setUniversalString(BerUniversalString universalString) {
+    this.universalString = universalString;
+  }
 
-	public BerUniversalString getUniversalString() {
-		return universalString;
-	}
+  public BerUniversalString getUniversalString() {
+    return universalString;
+  }
 
-	public void setUtf8String(BerUTF8String utf8String) {
-		this.utf8String = utf8String;
-	}
+  public void setUtf8String(BerUTF8String utf8String) {
+    this.utf8String = utf8String;
+  }
 
-	public BerUTF8String getUtf8String() {
-		return utf8String;
-	}
+  public BerUTF8String getUtf8String() {
+    return utf8String;
+  }
 
-	public void setBmpString(BerBMPString bmpString) {
-		this.bmpString = bmpString;
-	}
+  public void setBmpString(BerBMPString bmpString) {
+    this.bmpString = bmpString;
+  }
 
-	public BerBMPString getBmpString() {
-		return bmpString;
-	}
+  public BerBMPString getBmpString() {
+    return bmpString;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (bmpString != null) {
-			codeLength += bmpString.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (utf8String != null) {
-			codeLength += utf8String.encode(reverseOS, true);
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (bmpString != null) {
+      codeLength += bmpString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		if (universalString != null) {
-			codeLength += universalString.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (utf8String != null) {
+      codeLength += utf8String.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		if (printableString != null) {
-			codeLength += printableString.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (universalString != null) {
+      codeLength += universalString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		if (teletexString != null) {
-			codeLength += teletexString.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (printableString != null) {
+      codeLength += printableString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (teletexString != null) {
+      codeLength += teletexString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerTeletexString.tag)) {
-			teletexString = new BerTeletexString();
-			tlvByteCount += teletexString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerPrintableString.tag)) {
-			printableString = new BerPrintableString();
-			tlvByteCount += printableString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTeletexString.tag)) {
+      teletexString = new BerTeletexString();
+      tlvByteCount += teletexString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerUniversalString.tag)) {
-			universalString = new BerUniversalString();
-			tlvByteCount += universalString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerPrintableString.tag)) {
+      printableString = new BerPrintableString();
+      tlvByteCount += printableString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerUTF8String.tag)) {
-			utf8String = new BerUTF8String();
-			tlvByteCount += utf8String.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerUniversalString.tag)) {
+      universalString = new BerUniversalString();
+      tlvByteCount += universalString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerBMPString.tag)) {
-			bmpString = new BerBMPString();
-			tlvByteCount += bmpString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerUTF8String.tag)) {
+      utf8String = new BerUTF8String();
+      tlvByteCount += utf8String.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerBMPString.tag)) {
+      bmpString = new BerBMPString();
+      tlvByteCount += bmpString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (teletexString != null) {
-			sb.append("teletexString: ").append(teletexString);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (printableString != null) {
-			sb.append("printableString: ").append(printableString);
-			return;
-		}
+    if (teletexString != null) {
+      sb.append("teletexString: ").append(teletexString);
+      return;
+    }
 
-		if (universalString != null) {
-			sb.append("universalString: ").append(universalString);
-			return;
-		}
+    if (printableString != null) {
+      sb.append("printableString: ").append(printableString);
+      return;
+    }
 
-		if (utf8String != null) {
-			sb.append("utf8String: ").append(utf8String);
-			return;
-		}
+    if (universalString != null) {
+      sb.append("universalString: ").append(universalString);
+      return;
+    }
 
-		if (bmpString != null) {
-			sb.append("bmpString: ").append(bmpString);
-			return;
-		}
+    if (utf8String != null) {
+      sb.append("utf8String: ").append(utf8String);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (bmpString != null) {
+      sb.append("bmpString: ").append(bmpString);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

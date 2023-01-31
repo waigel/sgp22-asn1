@@ -15,250 +15,255 @@ import java.io.Serializable;
 
 public class RemoteProfileProvisioningResponse implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 2);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 2);
 
-	private InitiateAuthenticationResponse initiateAuthenticationResponse = null;
-	private AuthenticateClientResponseEs9 authenticateClientResponseEs9 = null;
-	private GetBoundProfilePackageResponse getBoundProfilePackageResponse = null;
-	private CancelSessionResponseEs9 cancelSessionResponseEs9 = null;
-	private AuthenticateClientResponseEs11 authenticateClientResponseEs11 = null;
+  private InitiateAuthenticationResponse initiateAuthenticationResponse = null;
+  private AuthenticateClientResponseEs9 authenticateClientResponseEs9 = null;
+  private GetBoundProfilePackageResponse getBoundProfilePackageResponse = null;
+  private CancelSessionResponseEs9 cancelSessionResponseEs9 = null;
+  private AuthenticateClientResponseEs11 authenticateClientResponseEs11 = null;
 
-	public RemoteProfileProvisioningResponse() {
-	}
+  public RemoteProfileProvisioningResponse() {}
 
-	public RemoteProfileProvisioningResponse(byte[] code) {
-		this.code = code;
-	}
+  public RemoteProfileProvisioningResponse(byte[] code) {
+    this.code = code;
+  }
 
-	public void setInitiateAuthenticationResponse(InitiateAuthenticationResponse initiateAuthenticationResponse) {
-		this.initiateAuthenticationResponse = initiateAuthenticationResponse;
-	}
+  public void setInitiateAuthenticationResponse(
+      InitiateAuthenticationResponse initiateAuthenticationResponse) {
+    this.initiateAuthenticationResponse = initiateAuthenticationResponse;
+  }
 
-	public InitiateAuthenticationResponse getInitiateAuthenticationResponse() {
-		return initiateAuthenticationResponse;
-	}
+  public InitiateAuthenticationResponse getInitiateAuthenticationResponse() {
+    return initiateAuthenticationResponse;
+  }
 
-	public void setAuthenticateClientResponseEs9(AuthenticateClientResponseEs9 authenticateClientResponseEs9) {
-		this.authenticateClientResponseEs9 = authenticateClientResponseEs9;
-	}
+  public void setAuthenticateClientResponseEs9(
+      AuthenticateClientResponseEs9 authenticateClientResponseEs9) {
+    this.authenticateClientResponseEs9 = authenticateClientResponseEs9;
+  }
 
-	public AuthenticateClientResponseEs9 getAuthenticateClientResponseEs9() {
-		return authenticateClientResponseEs9;
-	}
+  public AuthenticateClientResponseEs9 getAuthenticateClientResponseEs9() {
+    return authenticateClientResponseEs9;
+  }
 
-	public void setGetBoundProfilePackageResponse(GetBoundProfilePackageResponse getBoundProfilePackageResponse) {
-		this.getBoundProfilePackageResponse = getBoundProfilePackageResponse;
-	}
+  public void setGetBoundProfilePackageResponse(
+      GetBoundProfilePackageResponse getBoundProfilePackageResponse) {
+    this.getBoundProfilePackageResponse = getBoundProfilePackageResponse;
+  }
 
-	public GetBoundProfilePackageResponse getGetBoundProfilePackageResponse() {
-		return getBoundProfilePackageResponse;
-	}
+  public GetBoundProfilePackageResponse getGetBoundProfilePackageResponse() {
+    return getBoundProfilePackageResponse;
+  }
 
-	public void setCancelSessionResponseEs9(CancelSessionResponseEs9 cancelSessionResponseEs9) {
-		this.cancelSessionResponseEs9 = cancelSessionResponseEs9;
-	}
+  public void setCancelSessionResponseEs9(CancelSessionResponseEs9 cancelSessionResponseEs9) {
+    this.cancelSessionResponseEs9 = cancelSessionResponseEs9;
+  }
 
-	public CancelSessionResponseEs9 getCancelSessionResponseEs9() {
-		return cancelSessionResponseEs9;
-	}
+  public CancelSessionResponseEs9 getCancelSessionResponseEs9() {
+    return cancelSessionResponseEs9;
+  }
 
-	public void setAuthenticateClientResponseEs11(AuthenticateClientResponseEs11 authenticateClientResponseEs11) {
-		this.authenticateClientResponseEs11 = authenticateClientResponseEs11;
-	}
+  public void setAuthenticateClientResponseEs11(
+      AuthenticateClientResponseEs11 authenticateClientResponseEs11) {
+    this.authenticateClientResponseEs11 = authenticateClientResponseEs11;
+  }
 
-	public AuthenticateClientResponseEs11 getAuthenticateClientResponseEs11() {
-		return authenticateClientResponseEs11;
-	}
+  public AuthenticateClientResponseEs11 getAuthenticateClientResponseEs11() {
+    return authenticateClientResponseEs11;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (authenticateClientResponseEs11 != null) {
-			codeLength += authenticateClientResponseEs11.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 64
-			reverseOS.write(0x40);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (cancelSessionResponseEs9 != null) {
-			codeLength += cancelSessionResponseEs9.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 65
-			reverseOS.write(0x41);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (authenticateClientResponseEs11 != null) {
+      codeLength += authenticateClientResponseEs11.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 64
+      reverseOS.write(0x40);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (getBoundProfilePackageResponse != null) {
-			codeLength += getBoundProfilePackageResponse.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 58
-			reverseOS.write(0x3A);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (cancelSessionResponseEs9 != null) {
+      codeLength += cancelSessionResponseEs9.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 65
+      reverseOS.write(0x41);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (authenticateClientResponseEs9 != null) {
-			codeLength += authenticateClientResponseEs9.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 59
-			reverseOS.write(0x3B);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (getBoundProfilePackageResponse != null) {
+      codeLength += getBoundProfilePackageResponse.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 58
+      reverseOS.write(0x3A);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (initiateAuthenticationResponse != null) {
-			codeLength += initiateAuthenticationResponse.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 57
-			reverseOS.write(0x39);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (authenticateClientResponseEs9 != null) {
+      codeLength += authenticateClientResponseEs9.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 59
+      reverseOS.write(0x3B);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (initiateAuthenticationResponse != null) {
+      codeLength += initiateAuthenticationResponse.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 57
+      reverseOS.write(0x39);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 57)) {
-			initiateAuthenticationResponse = new InitiateAuthenticationResponse();
-			tlvByteCount += initiateAuthenticationResponse.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 59)) {
-			authenticateClientResponseEs9 = new AuthenticateClientResponseEs9();
-			tlvByteCount += authenticateClientResponseEs9.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 57)) {
+      initiateAuthenticationResponse = new InitiateAuthenticationResponse();
+      tlvByteCount += initiateAuthenticationResponse.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58)) {
-			getBoundProfilePackageResponse = new GetBoundProfilePackageResponse();
-			tlvByteCount += getBoundProfilePackageResponse.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 59)) {
+      authenticateClientResponseEs9 = new AuthenticateClientResponseEs9();
+      tlvByteCount += authenticateClientResponseEs9.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65)) {
-			cancelSessionResponseEs9 = new CancelSessionResponseEs9();
-			tlvByteCount += cancelSessionResponseEs9.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58)) {
+      getBoundProfilePackageResponse = new GetBoundProfilePackageResponse();
+      tlvByteCount += getBoundProfilePackageResponse.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 64)) {
-			authenticateClientResponseEs11 = new AuthenticateClientResponseEs11();
-			tlvByteCount += authenticateClientResponseEs11.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65)) {
+      cancelSessionResponseEs9 = new CancelSessionResponseEs9();
+      tlvByteCount += cancelSessionResponseEs9.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 64)) {
+      authenticateClientResponseEs11 = new AuthenticateClientResponseEs11();
+      tlvByteCount += authenticateClientResponseEs11.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (initiateAuthenticationResponse != null) {
-			sb.append("initiateAuthenticationResponse: ");
-			initiateAuthenticationResponse.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (authenticateClientResponseEs9 != null) {
-			sb.append("authenticateClientResponseEs9: ");
-			authenticateClientResponseEs9.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (initiateAuthenticationResponse != null) {
+      sb.append("initiateAuthenticationResponse: ");
+      initiateAuthenticationResponse.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (getBoundProfilePackageResponse != null) {
-			sb.append("getBoundProfilePackageResponse: ");
-			getBoundProfilePackageResponse.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (authenticateClientResponseEs9 != null) {
+      sb.append("authenticateClientResponseEs9: ");
+      authenticateClientResponseEs9.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (cancelSessionResponseEs9 != null) {
-			sb.append("cancelSessionResponseEs9: ");
-			cancelSessionResponseEs9.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (getBoundProfilePackageResponse != null) {
+      sb.append("getBoundProfilePackageResponse: ");
+      getBoundProfilePackageResponse.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (authenticateClientResponseEs11 != null) {
-			sb.append("authenticateClientResponseEs11: ");
-			authenticateClientResponseEs11.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (cancelSessionResponseEs9 != null) {
+      sb.append("cancelSessionResponseEs9: ");
+      cancelSessionResponseEs9.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (authenticateClientResponseEs11 != null) {
+      sb.append("authenticateClientResponseEs11: ");
+      authenticateClientResponseEs11.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

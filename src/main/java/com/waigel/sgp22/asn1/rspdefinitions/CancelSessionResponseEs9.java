@@ -16,142 +16,143 @@ import java.io.Serializable;
 
 public class CancelSessionResponseEs9 implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65);
 
-	private CancelSessionOk cancelSessionOk = null;
-	private BerInteger cancelSessionError = null;
+  private CancelSessionOk cancelSessionOk = null;
+  private BerInteger cancelSessionError = null;
 
-	public CancelSessionResponseEs9() {
-	}
+  public CancelSessionResponseEs9() {}
 
-	public CancelSessionResponseEs9(byte[] code) {
-		this.code = code;
-	}
+  public CancelSessionResponseEs9(byte[] code) {
+    this.code = code;
+  }
 
-	public void setCancelSessionOk(CancelSessionOk cancelSessionOk) {
-		this.cancelSessionOk = cancelSessionOk;
-	}
+  public void setCancelSessionOk(CancelSessionOk cancelSessionOk) {
+    this.cancelSessionOk = cancelSessionOk;
+  }
 
-	public CancelSessionOk getCancelSessionOk() {
-		return cancelSessionOk;
-	}
+  public CancelSessionOk getCancelSessionOk() {
+    return cancelSessionOk;
+  }
 
-	public void setCancelSessionError(BerInteger cancelSessionError) {
-		this.cancelSessionError = cancelSessionError;
-	}
+  public void setCancelSessionError(BerInteger cancelSessionError) {
+    this.cancelSessionError = cancelSessionError;
+  }
 
-	public BerInteger getCancelSessionError() {
-		return cancelSessionError;
-	}
+  public BerInteger getCancelSessionError() {
+    return cancelSessionError;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (cancelSessionError != null) {
-			codeLength += cancelSessionError.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 1
-			reverseOS.write(0x81);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (cancelSessionOk != null) {
-			codeLength += cancelSessionOk.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (cancelSessionError != null) {
+      codeLength += cancelSessionError.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 1
+      reverseOS.write(0x81);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (cancelSessionOk != null) {
+      codeLength += cancelSessionOk.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			cancelSessionOk = new CancelSessionOk();
-			tlvByteCount += cancelSessionOk.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
-			cancelSessionError = new BerInteger();
-			tlvByteCount += cancelSessionError.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      cancelSessionOk = new CancelSessionOk();
+      tlvByteCount += cancelSessionOk.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
+      cancelSessionError = new BerInteger();
+      tlvByteCount += cancelSessionError.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (cancelSessionOk != null) {
-			sb.append("cancelSessionOk: ");
-			cancelSessionOk.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (cancelSessionError != null) {
-			sb.append("cancelSessionError: ").append(cancelSessionError);
-			return;
-		}
+    if (cancelSessionOk != null) {
+      sb.append("cancelSessionOk: ");
+      cancelSessionOk.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (cancelSessionError != null) {
+      sb.append("cancelSessionError: ").append(cancelSessionError);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

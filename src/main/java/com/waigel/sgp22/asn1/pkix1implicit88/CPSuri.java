@@ -8,13 +8,11 @@ import com.beanit.asn1bean.ber.types.string.BerIA5String;
 
 public class CPSuri extends BerIA5String {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CPSuri() {
-	}
+  public CPSuri() {}
 
-	public CPSuri(byte[] value) {
-		super(value);
-	}
-
+  public CPSuri(byte[] value) {
+    super(value);
+  }
 }

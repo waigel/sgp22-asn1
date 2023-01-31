@@ -15,250 +15,253 @@ import java.io.Serializable;
 
 public class RemoteProfileProvisioningRequest implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 2);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 2);
 
-	private InitiateAuthenticationRequest initiateAuthenticationRequest = null;
-	private AuthenticateClientRequest authenticateClientRequest = null;
-	private GetBoundProfilePackageRequest getBoundProfilePackageRequest = null;
-	private CancelSessionRequestEs9 cancelSessionRequestEs9 = null;
-	private HandleNotification handleNotification = null;
+  private InitiateAuthenticationRequest initiateAuthenticationRequest = null;
+  private AuthenticateClientRequest authenticateClientRequest = null;
+  private GetBoundProfilePackageRequest getBoundProfilePackageRequest = null;
+  private CancelSessionRequestEs9 cancelSessionRequestEs9 = null;
+  private HandleNotification handleNotification = null;
 
-	public RemoteProfileProvisioningRequest() {
-	}
+  public RemoteProfileProvisioningRequest() {}
 
-	public RemoteProfileProvisioningRequest(byte[] code) {
-		this.code = code;
-	}
+  public RemoteProfileProvisioningRequest(byte[] code) {
+    this.code = code;
+  }
 
-	public void setInitiateAuthenticationRequest(InitiateAuthenticationRequest initiateAuthenticationRequest) {
-		this.initiateAuthenticationRequest = initiateAuthenticationRequest;
-	}
+  public void setInitiateAuthenticationRequest(
+      InitiateAuthenticationRequest initiateAuthenticationRequest) {
+    this.initiateAuthenticationRequest = initiateAuthenticationRequest;
+  }
 
-	public InitiateAuthenticationRequest getInitiateAuthenticationRequest() {
-		return initiateAuthenticationRequest;
-	}
+  public InitiateAuthenticationRequest getInitiateAuthenticationRequest() {
+    return initiateAuthenticationRequest;
+  }
 
-	public void setAuthenticateClientRequest(AuthenticateClientRequest authenticateClientRequest) {
-		this.authenticateClientRequest = authenticateClientRequest;
-	}
+  public void setAuthenticateClientRequest(AuthenticateClientRequest authenticateClientRequest) {
+    this.authenticateClientRequest = authenticateClientRequest;
+  }
 
-	public AuthenticateClientRequest getAuthenticateClientRequest() {
-		return authenticateClientRequest;
-	}
+  public AuthenticateClientRequest getAuthenticateClientRequest() {
+    return authenticateClientRequest;
+  }
 
-	public void setGetBoundProfilePackageRequest(GetBoundProfilePackageRequest getBoundProfilePackageRequest) {
-		this.getBoundProfilePackageRequest = getBoundProfilePackageRequest;
-	}
+  public void setGetBoundProfilePackageRequest(
+      GetBoundProfilePackageRequest getBoundProfilePackageRequest) {
+    this.getBoundProfilePackageRequest = getBoundProfilePackageRequest;
+  }
 
-	public GetBoundProfilePackageRequest getGetBoundProfilePackageRequest() {
-		return getBoundProfilePackageRequest;
-	}
+  public GetBoundProfilePackageRequest getGetBoundProfilePackageRequest() {
+    return getBoundProfilePackageRequest;
+  }
 
-	public void setCancelSessionRequestEs9(CancelSessionRequestEs9 cancelSessionRequestEs9) {
-		this.cancelSessionRequestEs9 = cancelSessionRequestEs9;
-	}
+  public void setCancelSessionRequestEs9(CancelSessionRequestEs9 cancelSessionRequestEs9) {
+    this.cancelSessionRequestEs9 = cancelSessionRequestEs9;
+  }
 
-	public CancelSessionRequestEs9 getCancelSessionRequestEs9() {
-		return cancelSessionRequestEs9;
-	}
+  public CancelSessionRequestEs9 getCancelSessionRequestEs9() {
+    return cancelSessionRequestEs9;
+  }
 
-	public void setHandleNotification(HandleNotification handleNotification) {
-		this.handleNotification = handleNotification;
-	}
+  public void setHandleNotification(HandleNotification handleNotification) {
+    this.handleNotification = handleNotification;
+  }
 
-	public HandleNotification getHandleNotification() {
-		return handleNotification;
-	}
+  public HandleNotification getHandleNotification() {
+    return handleNotification;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-		int codeLength = 0;
-		if (handleNotification != null) {
-			codeLength += handleNotification.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 61
-			reverseOS.write(0x3D);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (cancelSessionRequestEs9 != null) {
-			codeLength += cancelSessionRequestEs9.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 65
-			reverseOS.write(0x41);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (handleNotification != null) {
+      codeLength += handleNotification.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 61
+      reverseOS.write(0x3D);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (getBoundProfilePackageRequest != null) {
-			codeLength += getBoundProfilePackageRequest.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 58
-			reverseOS.write(0x3A);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (cancelSessionRequestEs9 != null) {
+      codeLength += cancelSessionRequestEs9.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 65
+      reverseOS.write(0x41);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (authenticateClientRequest != null) {
-			codeLength += authenticateClientRequest.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 59
-			reverseOS.write(0x3B);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (getBoundProfilePackageRequest != null) {
+      codeLength += getBoundProfilePackageRequest.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 58
+      reverseOS.write(0x3A);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (initiateAuthenticationRequest != null) {
-			codeLength += initiateAuthenticationRequest.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 57
-			reverseOS.write(0x39);
-			reverseOS.write(0xBF);
-			codeLength += 2;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (authenticateClientRequest != null) {
+      codeLength += authenticateClientRequest.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 59
+      reverseOS.write(0x3B);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (initiateAuthenticationRequest != null) {
+      codeLength += initiateAuthenticationRequest.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 57
+      reverseOS.write(0x39);
+      reverseOS.write(0xBF);
+      codeLength += 2;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 57)) {
-			initiateAuthenticationRequest = new InitiateAuthenticationRequest();
-			tlvByteCount += initiateAuthenticationRequest.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 59)) {
-			authenticateClientRequest = new AuthenticateClientRequest();
-			tlvByteCount += authenticateClientRequest.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 57)) {
+      initiateAuthenticationRequest = new InitiateAuthenticationRequest();
+      tlvByteCount += initiateAuthenticationRequest.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58)) {
-			getBoundProfilePackageRequest = new GetBoundProfilePackageRequest();
-			tlvByteCount += getBoundProfilePackageRequest.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 59)) {
+      authenticateClientRequest = new AuthenticateClientRequest();
+      tlvByteCount += authenticateClientRequest.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65)) {
-			cancelSessionRequestEs9 = new CancelSessionRequestEs9();
-			tlvByteCount += cancelSessionRequestEs9.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 58)) {
+      getBoundProfilePackageRequest = new GetBoundProfilePackageRequest();
+      tlvByteCount += getBoundProfilePackageRequest.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 61)) {
-			handleNotification = new HandleNotification();
-			tlvByteCount += handleNotification.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 65)) {
+      cancelSessionRequestEs9 = new CancelSessionRequestEs9();
+      tlvByteCount += cancelSessionRequestEs9.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 61)) {
+      handleNotification = new HandleNotification();
+      tlvByteCount += handleNotification.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (initiateAuthenticationRequest != null) {
-			sb.append("initiateAuthenticationRequest: ");
-			initiateAuthenticationRequest.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (authenticateClientRequest != null) {
-			sb.append("authenticateClientRequest: ");
-			authenticateClientRequest.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (initiateAuthenticationRequest != null) {
+      sb.append("initiateAuthenticationRequest: ");
+      initiateAuthenticationRequest.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (getBoundProfilePackageRequest != null) {
-			sb.append("getBoundProfilePackageRequest: ");
-			getBoundProfilePackageRequest.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (authenticateClientRequest != null) {
+      sb.append("authenticateClientRequest: ");
+      authenticateClientRequest.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (cancelSessionRequestEs9 != null) {
-			sb.append("cancelSessionRequestEs9: ");
-			cancelSessionRequestEs9.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (getBoundProfilePackageRequest != null) {
+      sb.append("getBoundProfilePackageRequest: ");
+      getBoundProfilePackageRequest.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (handleNotification != null) {
-			sb.append("handleNotification: ");
-			handleNotification.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (cancelSessionRequestEs9 != null) {
+      sb.append("cancelSessionRequestEs9: ");
+      cancelSessionRequestEs9.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (handleNotification != null) {
+      sb.append("handleNotification: ");
+      handleNotification.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

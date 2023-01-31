@@ -8,21 +8,19 @@ import java.math.BigInteger;
 
 public class BaseCRLNumber extends CRLNumber {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public BaseCRLNumber() {
-	}
+  public BaseCRLNumber() {}
 
-	public BaseCRLNumber(byte[] code) {
-		super(code);
-	}
+  public BaseCRLNumber(byte[] code) {
+    super(code);
+  }
 
-	public BaseCRLNumber(BigInteger value) {
-		super(value);
-	}
+  public BaseCRLNumber(BigInteger value) {
+    super(value);
+  }
 
-	public BaseCRLNumber(long value) {
-		super(value);
-	}
-
+  public BaseCRLNumber(long value) {
+    super(value);
+  }
 }

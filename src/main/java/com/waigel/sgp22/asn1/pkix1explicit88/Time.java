@@ -14,121 +14,121 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class Time implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private BerUtcTime utcTime = null;
-	private BerGeneralizedTime generalTime = null;
+  private byte[] code = null;
+  private BerUtcTime utcTime = null;
+  private BerGeneralizedTime generalTime = null;
 
-	public Time() {
-	}
+  public Time() {}
 
-	public Time(byte[] code) {
-		this.code = code;
-	}
+  public Time(byte[] code) {
+    this.code = code;
+  }
 
-	public void setUtcTime(BerUtcTime utcTime) {
-		this.utcTime = utcTime;
-	}
+  public void setUtcTime(BerUtcTime utcTime) {
+    this.utcTime = utcTime;
+  }
 
-	public BerUtcTime getUtcTime() {
-		return utcTime;
-	}
+  public BerUtcTime getUtcTime() {
+    return utcTime;
+  }
 
-	public void setGeneralTime(BerGeneralizedTime generalTime) {
-		this.generalTime = generalTime;
-	}
+  public void setGeneralTime(BerGeneralizedTime generalTime) {
+    this.generalTime = generalTime;
+  }
 
-	public BerGeneralizedTime getGeneralTime() {
-		return generalTime;
-	}
+  public BerGeneralizedTime getGeneralTime() {
+    return generalTime;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (generalTime != null) {
-			codeLength += generalTime.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (utcTime != null) {
-			codeLength += utcTime.encode(reverseOS, true);
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (generalTime != null) {
+      codeLength += generalTime.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (utcTime != null) {
+      codeLength += utcTime.encode(reverseOS, true);
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerUtcTime.tag)) {
-			utcTime = new BerUtcTime();
-			tlvByteCount += utcTime.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerGeneralizedTime.tag)) {
-			generalTime = new BerGeneralizedTime();
-			tlvByteCount += generalTime.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerUtcTime.tag)) {
+      utcTime = new BerUtcTime();
+      tlvByteCount += utcTime.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerGeneralizedTime.tag)) {
+      generalTime = new BerGeneralizedTime();
+      tlvByteCount += generalTime.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (utcTime != null) {
-			sb.append("utcTime: ").append(utcTime);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (generalTime != null) {
-			sb.append("generalTime: ").append(generalTime);
-			return;
-		}
+    if (utcTime != null) {
+      sb.append("utcTime: ").append(utcTime);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (generalTime != null) {
+      sb.append("generalTime: ").append(generalTime);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

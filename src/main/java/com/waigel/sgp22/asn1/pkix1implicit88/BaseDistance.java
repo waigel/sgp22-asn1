@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class BaseDistance extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public BaseDistance() {
-	}
+  public BaseDistance() {}
 
-	public BaseDistance(byte[] code) {
-		super(code);
-	}
+  public BaseDistance(byte[] code) {
+    super(code);
+  }
 
-	public BaseDistance(BigInteger value) {
-		super(value);
-	}
+  public BaseDistance(BigInteger value) {
+    super(value);
+  }
 
-	public BaseDistance(long value) {
-		super(value);
-	}
-
+  public BaseDistance(long value) {
+    super(value);
+  }
 }

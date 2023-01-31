@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class BppCommandId extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public BppCommandId() {
-	}
+  public BppCommandId() {}
 
-	public BppCommandId(byte[] code) {
-		super(code);
-	}
+  public BppCommandId(byte[] code) {
+    super(code);
+  }
 
-	public BppCommandId(BigInteger value) {
-		super(value);
-	}
+  public BppCommandId(BigInteger value) {
+    super(value);
+  }
 
-	public BppCommandId(long value) {
-		super(value);
-	}
-
+  public BppCommandId(long value) {
+    super(value);
+  }
 }

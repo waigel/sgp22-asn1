@@ -8,21 +8,19 @@ import com.beanit.asn1bean.ber.types.BerBitString;
 
 public class CertificateInfo extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public CertificateInfo() {
-	}
+  public CertificateInfo() {}
 
-	public CertificateInfo(byte[] code) {
-		super(code);
-	}
+  public CertificateInfo(byte[] code) {
+    super(code);
+  }
 
-	public CertificateInfo(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public CertificateInfo(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public CertificateInfo(boolean[] value) {
-		super(value);
-	}
-
+  public CertificateInfo(boolean[] value) {
+    super(value);
+  }
 }

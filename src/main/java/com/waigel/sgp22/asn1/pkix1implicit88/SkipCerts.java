@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class SkipCerts extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public SkipCerts() {
-	}
+  public SkipCerts() {}
 
-	public SkipCerts(byte[] code) {
-		super(code);
-	}
+  public SkipCerts(byte[] code) {
+    super(code);
+  }
 
-	public SkipCerts(BigInteger value) {
-		super(value);
-	}
+  public SkipCerts(BigInteger value) {
+    super(value);
+  }
 
-	public SkipCerts(long value) {
-		super(value);
-	}
-
+  public SkipCerts(long value) {
+    super(value);
+  }
 }

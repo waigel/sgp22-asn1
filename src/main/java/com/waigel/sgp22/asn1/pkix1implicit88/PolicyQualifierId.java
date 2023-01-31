@@ -8,17 +8,15 @@ import com.beanit.asn1bean.ber.types.BerObjectIdentifier;
 
 public class PolicyQualifierId extends BerObjectIdentifier {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PolicyQualifierId() {
-	}
+  public PolicyQualifierId() {}
 
-	public PolicyQualifierId(byte[] code) {
-		super(code);
-	}
+  public PolicyQualifierId(byte[] code) {
+    super(code);
+  }
 
-	public PolicyQualifierId(int[] value) {
-		super(value);
-	}
-
+  public PolicyQualifierId(int[] value) {
+    super(value);
+  }
 }

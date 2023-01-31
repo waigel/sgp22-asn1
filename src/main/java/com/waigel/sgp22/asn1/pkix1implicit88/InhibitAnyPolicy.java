@@ -8,21 +8,19 @@ import java.math.BigInteger;
 
 public class InhibitAnyPolicy extends SkipCerts {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InhibitAnyPolicy() {
-	}
+  public InhibitAnyPolicy() {}
 
-	public InhibitAnyPolicy(byte[] code) {
-		super(code);
-	}
+  public InhibitAnyPolicy(byte[] code) {
+    super(code);
+  }
 
-	public InhibitAnyPolicy(BigInteger value) {
-		super(value);
-	}
+  public InhibitAnyPolicy(BigInteger value) {
+    super(value);
+  }
 
-	public InhibitAnyPolicy(long value) {
-		super(value);
-	}
-
+  public InhibitAnyPolicy(long value) {
+    super(value);
+  }
 }

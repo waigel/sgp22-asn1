@@ -6,24 +6,21 @@ package com.waigel.sgp22.asn1.pkix1explicit88;
 
 import com.beanit.asn1bean.ber.types.BerBitString;
 
-
 public class UniqueIdentifier extends BerBitString {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public UniqueIdentifier() {
-	}
+  public UniqueIdentifier() {}
 
-	public UniqueIdentifier(byte[] code) {
-		super(code);
-	}
+  public UniqueIdentifier(byte[] code) {
+    super(code);
+  }
 
-	public UniqueIdentifier(byte[] value, int numBits) {
-		super(value, numBits);
-	}
+  public UniqueIdentifier(byte[] value, int numBits) {
+    super(value, numBits);
+  }
 
-	public UniqueIdentifier(boolean[] value) {
-		super(value);
-	}
-
+  public UniqueIdentifier(boolean[] value) {
+    super(value);
+  }
 }

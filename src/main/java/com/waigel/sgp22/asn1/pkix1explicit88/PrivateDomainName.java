@@ -14,121 +14,121 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-
 public class PrivateDomainName implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private BerNumericString numeric = null;
-	private BerPrintableString printable = null;
+  private byte[] code = null;
+  private BerNumericString numeric = null;
+  private BerPrintableString printable = null;
 
-	public PrivateDomainName() {
-	}
+  public PrivateDomainName() {}
 
-	public PrivateDomainName(byte[] code) {
-		this.code = code;
-	}
+  public PrivateDomainName(byte[] code) {
+    this.code = code;
+  }
 
-	public void setNumeric(BerNumericString numeric) {
-		this.numeric = numeric;
-	}
+  public void setNumeric(BerNumericString numeric) {
+    this.numeric = numeric;
+  }
 
-	public BerNumericString getNumeric() {
-		return numeric;
-	}
+  public BerNumericString getNumeric() {
+    return numeric;
+  }
 
-	public void setPrintable(BerPrintableString printable) {
-		this.printable = printable;
-	}
+  public void setPrintable(BerPrintableString printable) {
+    this.printable = printable;
+  }
 
-	public BerPrintableString getPrintable() {
-		return printable;
-	}
+  public BerPrintableString getPrintable() {
+    return printable;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (printable != null) {
-			codeLength += printable.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (numeric != null) {
-			codeLength += numeric.encode(reverseOS, true);
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (printable != null) {
+      codeLength += printable.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (numeric != null) {
+      codeLength += numeric.encode(reverseOS, true);
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerNumericString.tag)) {
-			numeric = new BerNumericString();
-			tlvByteCount += numeric.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerPrintableString.tag)) {
-			printable = new BerPrintableString();
-			tlvByteCount += printable.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerNumericString.tag)) {
+      numeric = new BerNumericString();
+      tlvByteCount += numeric.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerPrintableString.tag)) {
+      printable = new BerPrintableString();
+      tlvByteCount += printable.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (numeric != null) {
-			sb.append("numeric: ").append(numeric);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (printable != null) {
-			sb.append("printable: ").append(printable);
-			return;
-		}
+    if (numeric != null) {
+      sb.append("numeric: ").append(numeric);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (printable != null) {
+      sb.append("printable: ").append(printable);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

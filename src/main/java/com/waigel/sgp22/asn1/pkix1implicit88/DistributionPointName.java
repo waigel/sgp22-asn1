@@ -7,135 +7,135 @@ package com.waigel.sgp22.asn1.pkix1implicit88;
 import com.beanit.asn1bean.ber.BerTag;
 import com.beanit.asn1bean.ber.ReverseByteArrayOutputStream;
 import com.beanit.asn1bean.ber.types.BerType;
+import com.waigel.sgp22.asn1.pkix1explicit88.RelativeDistinguishedName;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import com.waigel.sgp22.asn1.pkix1explicit88.RelativeDistinguishedName;
-
 public class DistributionPointName implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private GeneralNames fullName = null;
-	private RelativeDistinguishedName nameRelativeToCRLIssuer = null;
+  private byte[] code = null;
+  private GeneralNames fullName = null;
+  private RelativeDistinguishedName nameRelativeToCRLIssuer = null;
 
-	public DistributionPointName() {
-	}
+  public DistributionPointName() {}
 
-	public DistributionPointName(byte[] code) {
-		this.code = code;
-	}
+  public DistributionPointName(byte[] code) {
+    this.code = code;
+  }
 
-	public void setFullName(GeneralNames fullName) {
-		this.fullName = fullName;
-	}
+  public void setFullName(GeneralNames fullName) {
+    this.fullName = fullName;
+  }
 
-	public GeneralNames getFullName() {
-		return fullName;
-	}
+  public GeneralNames getFullName() {
+    return fullName;
+  }
 
-	public void setNameRelativeToCRLIssuer(RelativeDistinguishedName nameRelativeToCRLIssuer) {
-		this.nameRelativeToCRLIssuer = nameRelativeToCRLIssuer;
-	}
+  public void setNameRelativeToCRLIssuer(RelativeDistinguishedName nameRelativeToCRLIssuer) {
+    this.nameRelativeToCRLIssuer = nameRelativeToCRLIssuer;
+  }
 
-	public RelativeDistinguishedName getNameRelativeToCRLIssuer() {
-		return nameRelativeToCRLIssuer;
-	}
+  public RelativeDistinguishedName getNameRelativeToCRLIssuer() {
+    return nameRelativeToCRLIssuer;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (nameRelativeToCRLIssuer != null) {
-			codeLength += nameRelativeToCRLIssuer.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 1
-			reverseOS.write(0xA1);
-			codeLength += 1;
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (fullName != null) {
-			codeLength += fullName.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (nameRelativeToCRLIssuer != null) {
+      codeLength += nameRelativeToCRLIssuer.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 1
+      reverseOS.write(0xA1);
+      codeLength += 1;
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (fullName != null) {
+      codeLength += fullName.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			fullName = new GeneralNames();
-			tlvByteCount += fullName.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 1)) {
-			nameRelativeToCRLIssuer = new RelativeDistinguishedName();
-			tlvByteCount += nameRelativeToCRLIssuer.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      fullName = new GeneralNames();
+      tlvByteCount += fullName.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 1)) {
+      nameRelativeToCRLIssuer = new RelativeDistinguishedName();
+      tlvByteCount += nameRelativeToCRLIssuer.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (fullName != null) {
-			sb.append("fullName: ");
-			fullName.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (nameRelativeToCRLIssuer != null) {
-			sb.append("nameRelativeToCRLIssuer: ");
-			nameRelativeToCRLIssuer.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (fullName != null) {
+      sb.append("fullName: ");
+      fullName.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (nameRelativeToCRLIssuer != null) {
+      sb.append("nameRelativeToCRLIssuer: ");
+      nameRelativeToCRLIssuer.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

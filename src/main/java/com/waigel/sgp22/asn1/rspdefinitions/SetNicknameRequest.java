@@ -17,176 +17,170 @@ import java.io.Serializable;
 
 public class SetNicknameRequest implements BerType, Serializable {
 
+  private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 1;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 41);
 
+  private byte[] code = null;
+  private Iccid iccid = null;
+  private BerUTF8String profileNickname = null;
 
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 41);
+  public SetNicknameRequest() {}
 
-	private byte[] code = null;
-	private Iccid iccid = null;
-	private BerUTF8String profileNickname = null;
+  public SetNicknameRequest(byte[] code) {
+    this.code = code;
+  }
 
-	public SetNicknameRequest() {
-	}
+  public void setIccid(Iccid iccid) {
+    this.iccid = iccid;
+  }
 
-	public SetNicknameRequest(byte[] code) {
-		this.code = code;
-	}
+  public Iccid getIccid() {
+    return iccid;
+  }
 
-	public void setIccid(Iccid iccid) {
-		this.iccid = iccid;
-	}
+  public void setProfileNickname(BerUTF8String profileNickname) {
+    this.profileNickname = profileNickname;
+  }
 
-	public Iccid getIccid() {
-		return iccid;
-	}
+  public BerUTF8String getProfileNickname() {
+    return profileNickname;
+  }
 
-	public void setProfileNickname(BerUTF8String profileNickname) {
-		this.profileNickname = profileNickname;
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public BerUTF8String getProfileNickname() {
-		return profileNickname;
-	}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+    int codeLength = 0;
+    codeLength += profileNickname.encode(reverseOS, false);
+    // write tag: CONTEXT_CLASS, PRIMITIVE, 16
+    reverseOS.write(0x90);
+    codeLength += 1;
 
-		int codeLength = 0;
-		codeLength += profileNickname.encode(reverseOS, false);
-		// write tag: CONTEXT_CLASS, PRIMITIVE, 16
-		reverseOS.write(0x90);
-		codeLength += 1;
+    codeLength += iccid.encode(reverseOS, true);
 
-		codeLength += iccid.encode(reverseOS, true);
+    codeLength += BerLength.encodeLength(reverseOS, codeLength);
 
-		codeLength += BerLength.encodeLength(reverseOS, codeLength);
+    if (withTag) {
+      codeLength += tag.encode(reverseOS);
+    }
 
-		if (withTag) {
-			codeLength += tag.encode(reverseOS);
-		}
+    return codeLength;
+  }
 
-		return codeLength;
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-	}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlByteCount = 0;
+    int vByteCount = 0;
+    BerTag berTag = new BerTag();
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+    if (withTag) {
+      tlByteCount += tag.decodeAndCheck(is);
+    }
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlByteCount = 0;
-		int vByteCount = 0;
-		BerTag berTag = new BerTag();
+    BerLength length = new BerLength();
+    tlByteCount += length.decode(is);
+    int lengthVal = length.val;
+    vByteCount += berTag.decode(is);
 
-		if (withTag) {
-			tlByteCount += tag.decodeAndCheck(is);
-		}
+    if (berTag.equals(Iccid.tag)) {
+      iccid = new Iccid();
+      vByteCount += iccid.decode(is, false);
+      vByteCount += berTag.decode(is);
+    } else {
+      throw new IOException("Tag does not match mandatory sequence component.");
+    }
 
-		BerLength length = new BerLength();
-		tlByteCount += length.decode(is);
-		int lengthVal = length.val;
-		vByteCount += berTag.decode(is);
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 16)) {
+      profileNickname = new BerUTF8String();
+      vByteCount += profileNickname.decode(is, false);
+      if (lengthVal >= 0 && vByteCount == lengthVal) {
+        return tlByteCount + vByteCount;
+      }
+      vByteCount += berTag.decode(is);
+    } else {
+      throw new IOException("Tag does not match mandatory sequence component.");
+    }
 
-		if (berTag.equals(Iccid.tag)) {
-			iccid = new Iccid();
-			vByteCount += iccid.decode(is, false);
-			vByteCount += berTag.decode(is);
-		}
-		else {
-			throw new IOException("Tag does not match mandatory sequence component.");
-		}
+    if (lengthVal < 0) {
+      while (!berTag.equals(0, 0, 0)) {
+        vByteCount += DecodeUtil.decodeUnknownComponent(is);
+        vByteCount += berTag.decode(is);
+      }
+      vByteCount += BerLength.readEocByte(is);
+      return tlByteCount + vByteCount;
+    } else {
+      while (vByteCount < lengthVal) {
+        vByteCount += DecodeUtil.decodeUnknownComponent(is);
+        if (vByteCount == lengthVal) {
+          return tlByteCount + vByteCount;
+        }
+        vByteCount += berTag.decode(is);
+      }
+    }
+    throw new IOException(
+        "Unexpected end of sequence, length tag: " + lengthVal + ", bytes decoded: " + vByteCount);
+  }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 16)) {
-			profileNickname = new BerUTF8String();
-			vByteCount += profileNickname.decode(is, false);
-			if (lengthVal >= 0 && vByteCount == lengthVal) {
-				return tlByteCount + vByteCount;
-			}
-			vByteCount += berTag.decode(is);
-		}
-		else {
-			throw new IOException("Tag does not match mandatory sequence component.");
-		}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-		if (lengthVal < 0) {
-			while (!berTag.equals(0, 0, 0)) {
-				vByteCount += DecodeUtil.decodeUnknownComponent(is);
-				vByteCount += berTag.decode(is);
-			}
-			vByteCount += BerLength.readEocByte(is);
-			return tlByteCount + vByteCount;
-		}
-		else {
-			while (vByteCount < lengthVal) {
-				vByteCount += DecodeUtil.decodeUnknownComponent(is);
-				if (vByteCount == lengthVal) {
-					return tlByteCount + vByteCount;
-				}
-				vByteCount += berTag.decode(is);
-			}
-		}
-		throw new IOException("Unexpected end of sequence, length tag: " + lengthVal + ", bytes decoded: " + vByteCount);
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+    sb.append("{");
+    sb.append("\n");
+    for (int i = 0; i < indentLevel + 1; i++) {
+      sb.append("\t");
+    }
+    if (iccid != null) {
+      sb.append("iccid: ").append(iccid);
+    } else {
+      sb.append("iccid: <empty-required-field>");
+    }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+    sb.append(",\n");
+    for (int i = 0; i < indentLevel + 1; i++) {
+      sb.append("\t");
+    }
+    if (profileNickname != null) {
+      sb.append("profileNickname: ").append(profileNickname);
+    } else {
+      sb.append("profileNickname: <empty-required-field>");
+    }
 
-		sb.append("{");
-		sb.append("\n");
-		for (int i = 0; i < indentLevel + 1; i++) {
-			sb.append("\t");
-		}
-		if (iccid != null) {
-			sb.append("iccid: ").append(iccid);
-		}
-		else {
-			sb.append("iccid: <empty-required-field>");
-		}
-
-		sb.append(",\n");
-		for (int i = 0; i < indentLevel + 1; i++) {
-			sb.append("\t");
-		}
-		if (profileNickname != null) {
-			sb.append("profileNickname: ").append(profileNickname);
-		}
-		else {
-			sb.append("profileNickname: <empty-required-field>");
-		}
-
-		sb.append("\n");
-		for (int i = 0; i < indentLevel; i++) {
-			sb.append("\t");
-		}
-		sb.append("}");
-	}
-
+    sb.append("\n");
+    for (int i = 0; i < indentLevel; i++) {
+      sb.append("\t");
+    }
+    sb.append("}");
+  }
 }
-

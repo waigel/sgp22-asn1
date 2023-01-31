@@ -18,278 +18,280 @@ import java.util.List;
 
 public class ProfileInfoListResponse implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 45);
+  private byte[] code = null;
+  public static final BerTag tag = new BerTag(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 45);
 
-	public static class ProfileInfoListOk implements BerType, Serializable {
+  public static class ProfileInfoListOk implements BerType, Serializable {
 
-		private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-		public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 16);
-		private byte[] code = null;
-		private List<ProfileInfo> seqOf = null;
+    public static final BerTag tag = new BerTag(BerTag.UNIVERSAL_CLASS, BerTag.CONSTRUCTED, 16);
+    private byte[] code = null;
+    private List<ProfileInfo> seqOf = null;
 
-		public ProfileInfoListOk() {
-			seqOf = new ArrayList<>();
-		}
+    public ProfileInfoListOk() {
+      seqOf = new ArrayList<>();
+    }
 
-		public ProfileInfoListOk(byte[] code) {
-			this.code = code;
-		}
+    public ProfileInfoListOk(byte[] code) {
+      this.code = code;
+    }
 
-		public List<ProfileInfo> getProfileInfo() {
-			if (seqOf == null) {
-				seqOf = new ArrayList<>();
-			}
-			return seqOf;
-		}
+    public List<ProfileInfo> getProfileInfo() {
+      if (seqOf == null) {
+        seqOf = new ArrayList<>();
+      }
+      return seqOf;
+    }
 
-		@Override
-		public int encode(OutputStream reverseOS) throws IOException {
-			return encode(reverseOS, true);
-		}
+    @Override
+    public int encode(OutputStream reverseOS) throws IOException {
+      return encode(reverseOS, true);
+    }
 
-		public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+    public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-			if (code != null) {
-				reverseOS.write(code);
-				if (withTag) {
-					return tag.encode(reverseOS) + code.length;
-				}
-				return code.length;
-			}
+      if (code != null) {
+        reverseOS.write(code);
+        if (withTag) {
+          return tag.encode(reverseOS) + code.length;
+        }
+        return code.length;
+      }
 
-			int codeLength = 0;
-			for (int i = (seqOf.size() - 1); i >= 0; i--) {
-				codeLength += seqOf.get(i).encode(reverseOS, true);
-			}
+      int codeLength = 0;
+      for (int i = (seqOf.size() - 1); i >= 0; i--) {
+        codeLength += seqOf.get(i).encode(reverseOS, true);
+      }
 
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
 
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
 
-			return codeLength;
-		}
+      return codeLength;
+    }
 
-		@Override
-		public int decode(InputStream is) throws IOException {
-			return decode(is, true);
-		}
+    @Override
+    public int decode(InputStream is) throws IOException {
+      return decode(is, true);
+    }
 
-		public int decode(InputStream is, boolean withTag) throws IOException {
-			int tlByteCount = 0;
-			int vByteCount = 0;
-			BerTag berTag = new BerTag();
-			if (withTag) {
-				tlByteCount += tag.decodeAndCheck(is);
-			}
+    public int decode(InputStream is, boolean withTag) throws IOException {
+      int tlByteCount = 0;
+      int vByteCount = 0;
+      BerTag berTag = new BerTag();
+      if (withTag) {
+        tlByteCount += tag.decodeAndCheck(is);
+      }
 
-			BerLength length = new BerLength();
-			tlByteCount += length.decode(is);
-			int lengthVal = length.val;
+      BerLength length = new BerLength();
+      tlByteCount += length.decode(is);
+      int lengthVal = length.val;
 
-			while (vByteCount < lengthVal || lengthVal < 0) {
-				vByteCount += berTag.decode(is);
+      while (vByteCount < lengthVal || lengthVal < 0) {
+        vByteCount += berTag.decode(is);
 
-				if (lengthVal < 0 && berTag.equals(0, 0, 0)) {
-					vByteCount += BerLength.readEocByte(is);
-					break;
-				}
+        if (lengthVal < 0 && berTag.equals(0, 0, 0)) {
+          vByteCount += BerLength.readEocByte(is);
+          break;
+        }
 
-				if (!berTag.equals(ProfileInfo.tag)) {
-					throw new IOException("Tag does not match mandatory sequence of/set of component.");
-				}
-				ProfileInfo element = new ProfileInfo();
-				vByteCount += element.decode(is, false);
-				seqOf.add(element);
-			}
-			if (lengthVal >= 0 && vByteCount != lengthVal) {
-				throw new IOException("Decoded SequenceOf or SetOf has wrong length. Expected " + lengthVal + " but has " + vByteCount);
+        if (!berTag.equals(ProfileInfo.tag)) {
+          throw new IOException("Tag does not match mandatory sequence of/set of component.");
+        }
+        ProfileInfo element = new ProfileInfo();
+        vByteCount += element.decode(is, false);
+        seqOf.add(element);
+      }
+      if (lengthVal >= 0 && vByteCount != lengthVal) {
+        throw new IOException(
+            "Decoded SequenceOf or SetOf has wrong length. Expected "
+                + lengthVal
+                + " but has "
+                + vByteCount);
+      }
+      return tlByteCount + vByteCount;
+    }
 
-			}
-			return tlByteCount + vByteCount;
-		}
+    public void encodeAndSave(int encodingSizeGuess) throws IOException {
+      ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+      encode(reverseOS, false);
+      code = reverseOS.getArray();
+    }
 
-		public void encodeAndSave(int encodingSizeGuess) throws IOException {
-			ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-			encode(reverseOS, false);
-			code = reverseOS.getArray();
-		}
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder();
+      appendAsString(sb, 0);
+      return sb.toString();
+    }
 
-		@Override
-		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			appendAsString(sb, 0);
-			return sb.toString();
-		}
+    public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		public void appendAsString(StringBuilder sb, int indentLevel) {
+      sb.append("{\n");
+      for (int i = 0; i < indentLevel + 1; i++) {
+        sb.append("\t");
+      }
+      if (seqOf == null) {
+        sb.append("null");
+      } else {
+        Iterator<ProfileInfo> it = seqOf.iterator();
+        if (it.hasNext()) {
+          it.next().appendAsString(sb, indentLevel + 1);
+          while (it.hasNext()) {
+            sb.append(",\n");
+            for (int i = 0; i < indentLevel + 1; i++) {
+              sb.append("\t");
+            }
+            it.next().appendAsString(sb, indentLevel + 1);
+          }
+        }
+      }
 
-			sb.append("{\n");
-			for (int i = 0; i < indentLevel + 1; i++) {
-				sb.append("\t");
-			}
-			if (seqOf == null) {
-				sb.append("null");
-			}
-			else {
-				Iterator<ProfileInfo> it = seqOf.iterator();
-				if (it.hasNext()) {
-					it.next().appendAsString(sb, indentLevel + 1);
-					while (it.hasNext()) {
-						sb.append(",\n");
-						for (int i = 0; i < indentLevel + 1; i++) {
-							sb.append("\t");
-						}
-						it.next().appendAsString(sb, indentLevel + 1);
-					}
-				}
-			}
+      sb.append("\n");
+      for (int i = 0; i < indentLevel; i++) {
+        sb.append("\t");
+      }
+      sb.append("}");
+    }
+  }
 
-			sb.append("\n");
-			for (int i = 0; i < indentLevel; i++) {
-				sb.append("\t");
-			}
-			sb.append("}");
-		}
+  private ProfileInfoListOk profileInfoListOk = null;
+  private ProfileInfoListError profileInfoListError = null;
 
-	}
+  public ProfileInfoListResponse() {}
 
-	private ProfileInfoListOk profileInfoListOk = null;
-	private ProfileInfoListError profileInfoListError = null;
+  public ProfileInfoListResponse(byte[] code) {
+    this.code = code;
+  }
 
-	public ProfileInfoListResponse() {
-	}
+  public void setProfileInfoListOk(ProfileInfoListOk profileInfoListOk) {
+    this.profileInfoListOk = profileInfoListOk;
+  }
 
-	public ProfileInfoListResponse(byte[] code) {
-		this.code = code;
-	}
+  public ProfileInfoListOk getProfileInfoListOk() {
+    return profileInfoListOk;
+  }
 
-	public void setProfileInfoListOk(ProfileInfoListOk profileInfoListOk) {
-		this.profileInfoListOk = profileInfoListOk;
-	}
+  public void setProfileInfoListError(ProfileInfoListError profileInfoListError) {
+    this.profileInfoListError = profileInfoListError;
+  }
 
-	public ProfileInfoListOk getProfileInfoListOk() {
-		return profileInfoListOk;
-	}
+  public ProfileInfoListError getProfileInfoListError() {
+    return profileInfoListError;
+  }
 
-	public void setProfileInfoListError(ProfileInfoListError profileInfoListError) {
-		this.profileInfoListError = profileInfoListError;
-	}
+  public byte[] getRaw() {
+    return code;
+  }
 
-	public ProfileInfoListError getProfileInfoListError() {
-		return profileInfoListError;
-	}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
+    return encode(reverseOS, true);
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
-		return encode(reverseOS, true);
-	}
+  public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
 
-	public int encode(OutputStream reverseOS, boolean withTag) throws IOException {
+    if (code != null) {
+      reverseOS.write(code);
+      if (withTag) {
+        return tag.encode(reverseOS) + code.length;
+      }
+      return code.length;
+    }
 
-		if (code != null) {
-			reverseOS.write(code);
-			if (withTag) {
-				return tag.encode(reverseOS) + code.length;
-			}
-			return code.length;
-		}
+    int codeLength = 0;
+    if (profileInfoListError != null) {
+      codeLength += profileInfoListError.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, PRIMITIVE, 1
+      reverseOS.write(0x81);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		int codeLength = 0;
-		if (profileInfoListError != null) {
-			codeLength += profileInfoListError.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, PRIMITIVE, 1
-			reverseOS.write(0x81);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    if (profileInfoListOk != null) {
+      codeLength += profileInfoListOk.encode(reverseOS, false);
+      // write tag: CONTEXT_CLASS, CONSTRUCTED, 0
+      reverseOS.write(0xA0);
+      codeLength += 1;
+      codeLength += BerLength.encodeLength(reverseOS, codeLength);
+      if (withTag) {
+        codeLength += tag.encode(reverseOS);
+      }
+      return codeLength;
+    }
 
-		if (profileInfoListOk != null) {
-			codeLength += profileInfoListOk.encode(reverseOS, false);
-			// write tag: CONTEXT_CLASS, CONSTRUCTED, 0
-			reverseOS.write(0xA0);
-			codeLength += 1;
-			codeLength += BerLength.encodeLength(reverseOS, codeLength);
-			if (withTag) {
-				codeLength += tag.encode(reverseOS);
-			}
-			return codeLength;
-		}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, true);
+  }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, true);
-	}
+  public int decode(InputStream is, boolean withTag) throws IOException {
+    int tlvByteCount = 0;
+    BerTag berTag = new BerTag();
 
-	public int decode(InputStream is, boolean withTag) throws IOException {
-		int tlvByteCount = 0;
-		BerTag berTag = new BerTag();
+    if (withTag) {
+      tlvByteCount += tag.decodeAndCheck(is);
+    }
 
-		if (withTag) {
-			tlvByteCount += tag.decodeAndCheck(is);
-		}
+    BerLength explicitTagLength = new BerLength();
+    tlvByteCount += explicitTagLength.decode(is);
+    tlvByteCount += berTag.decode(is);
 
-		BerLength explicitTagLength = new BerLength();
-		tlvByteCount += explicitTagLength.decode(is);
-		tlvByteCount += berTag.decode(is);
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
+      profileInfoListOk = new ProfileInfoListOk();
+      tlvByteCount += profileInfoListOk.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.CONSTRUCTED, 0)) {
-			profileInfoListOk = new ProfileInfoListOk();
-			tlvByteCount += profileInfoListOk.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
+      profileInfoListError = new ProfileInfoListError();
+      tlvByteCount += profileInfoListError.decode(is, false);
+      tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerTag.CONTEXT_CLASS, BerTag.PRIMITIVE, 1)) {
-			profileInfoListError = new ProfileInfoListError();
-			tlvByteCount += profileInfoListError.decode(is, false);
-			tlvByteCount += explicitTagLength.readEocIfIndefinite(is);
-			return tlvByteCount;
-		}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS, false);
+    code = reverseOS.getArray();
+  }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS, false);
-		code = reverseOS.getArray();
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+    if (profileInfoListOk != null) {
+      sb.append("profileInfoListOk: ");
+      profileInfoListOk.appendAsString(sb, indentLevel + 1);
+      return;
+    }
 
-		if (profileInfoListOk != null) {
-			sb.append("profileInfoListOk: ");
-			profileInfoListOk.appendAsString(sb, indentLevel + 1);
-			return;
-		}
+    if (profileInfoListError != null) {
+      sb.append("profileInfoListError: ").append(profileInfoListError);
+      return;
+    }
 
-		if (profileInfoListError != null) {
-			sb.append("profileInfoListError: ").append(profileInfoListError);
-			return;
-		}
-
-		sb.append("<none>");
-	}
-
+    sb.append("<none>");
+  }
 }
-

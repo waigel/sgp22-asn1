@@ -4,16 +4,13 @@
 
 package com.waigel.sgp22.asn1.pkix1explicit88;
 
-
 public class PhysicalDeliveryOrganizationName extends PDSParameter {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PhysicalDeliveryOrganizationName() {
-	}
+  public PhysicalDeliveryOrganizationName() {}
 
-	public PhysicalDeliveryOrganizationName(byte[] code) {
-		super(code);
-	}
-
+  public PhysicalDeliveryOrganizationName(byte[] code) {
+    super(code);
+  }
 }

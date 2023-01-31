@@ -18,168 +18,169 @@ import java.io.Serializable;
 
 public class DisplayText implements BerType, Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private byte[] code = null;
-	private BerIA5String ia5String = null;
-	private BerVisibleString visibleString = null;
-	private BerBMPString bmpString = null;
-	private BerUTF8String utf8String = null;
+  private byte[] code = null;
+  private BerIA5String ia5String = null;
+  private BerVisibleString visibleString = null;
+  private BerBMPString bmpString = null;
+  private BerUTF8String utf8String = null;
 
-	public DisplayText() {
-	}
+  public DisplayText() {}
 
-	public DisplayText(byte[] code) {
-		this.code = code;
-	}
+  public DisplayText(byte[] code) {
+    this.code = code;
+  }
 
-	public void setIa5String(BerIA5String ia5String) {
-		this.ia5String = ia5String;
-	}
+  public void setIa5String(BerIA5String ia5String) {
+    this.ia5String = ia5String;
+  }
 
-	public BerIA5String getIa5String() {
-		return ia5String;
-	}
+  public BerIA5String getIa5String() {
+    return ia5String;
+  }
 
-	public void setVisibleString(BerVisibleString visibleString) {
-		this.visibleString = visibleString;
-	}
+  public void setVisibleString(BerVisibleString visibleString) {
+    this.visibleString = visibleString;
+  }
 
-	public BerVisibleString getVisibleString() {
-		return visibleString;
-	}
+  public BerVisibleString getVisibleString() {
+    return visibleString;
+  }
 
-	public void setBmpString(BerBMPString bmpString) {
-		this.bmpString = bmpString;
-	}
+  public void setBmpString(BerBMPString bmpString) {
+    this.bmpString = bmpString;
+  }
 
-	public BerBMPString getBmpString() {
-		return bmpString;
-	}
+  public BerBMPString getBmpString() {
+    return bmpString;
+  }
 
-	public void setUtf8String(BerUTF8String utf8String) {
-		this.utf8String = utf8String;
-	}
+  public void setUtf8String(BerUTF8String utf8String) {
+    this.utf8String = utf8String;
+  }
 
-	public BerUTF8String getUtf8String() {
-		return utf8String;
-	}
+  public BerUTF8String getUtf8String() {
+    return utf8String;
+  }
 
-	@Override
-	public int encode(OutputStream reverseOS) throws IOException {
+  public byte[] getRaw() {
+    return code;
+  }
 
-		if (code != null) {
-			reverseOS.write(code);
-			return code.length;
-		}
+  @Override
+  public int encode(OutputStream reverseOS) throws IOException {
 
-		int codeLength = 0;
-		if (utf8String != null) {
-			codeLength += utf8String.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (code != null) {
+      reverseOS.write(code);
+      return code.length;
+    }
 
-		if (bmpString != null) {
-			codeLength += bmpString.encode(reverseOS, true);
-			return codeLength;
-		}
+    int codeLength = 0;
+    if (utf8String != null) {
+      codeLength += utf8String.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		if (visibleString != null) {
-			codeLength += visibleString.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (bmpString != null) {
+      codeLength += bmpString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		if (ia5String != null) {
-			codeLength += ia5String.encode(reverseOS, true);
-			return codeLength;
-		}
+    if (visibleString != null) {
+      codeLength += visibleString.encode(reverseOS, true);
+      return codeLength;
+    }
 
-		throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
-	}
+    if (ia5String != null) {
+      codeLength += ia5String.encode(reverseOS, true);
+      return codeLength;
+    }
 
-	@Override
-	public int decode(InputStream is) throws IOException {
-		return decode(is, null);
-	}
+    throw new IOException("Error encoding CHOICE: No element of CHOICE was selected.");
+  }
 
-	public int decode(InputStream is, BerTag berTag) throws IOException {
+  @Override
+  public int decode(InputStream is) throws IOException {
+    return decode(is, null);
+  }
 
-		int tlvByteCount = 0;
-		boolean tagWasPassed = (berTag != null);
+  public int decode(InputStream is, BerTag berTag) throws IOException {
 
-		if (berTag == null) {
-			berTag = new BerTag();
-			tlvByteCount += berTag.decode(is);
-		}
+    int tlvByteCount = 0;
+    boolean tagWasPassed = (berTag != null);
 
-		if (berTag.equals(BerIA5String.tag)) {
-			ia5String = new BerIA5String();
-			tlvByteCount += ia5String.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag == null) {
+      berTag = new BerTag();
+      tlvByteCount += berTag.decode(is);
+    }
 
-		if (berTag.equals(BerVisibleString.tag)) {
-			visibleString = new BerVisibleString();
-			tlvByteCount += visibleString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerIA5String.tag)) {
+      ia5String = new BerIA5String();
+      tlvByteCount += ia5String.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerBMPString.tag)) {
-			bmpString = new BerBMPString();
-			tlvByteCount += bmpString.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerVisibleString.tag)) {
+      visibleString = new BerVisibleString();
+      tlvByteCount += visibleString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (berTag.equals(BerUTF8String.tag)) {
-			utf8String = new BerUTF8String();
-			tlvByteCount += utf8String.decode(is, false);
-			return tlvByteCount;
-		}
+    if (berTag.equals(BerBMPString.tag)) {
+      bmpString = new BerBMPString();
+      tlvByteCount += bmpString.decode(is, false);
+      return tlvByteCount;
+    }
 
-		if (tagWasPassed) {
-			return 0;
-		}
+    if (berTag.equals(BerUTF8String.tag)) {
+      utf8String = new BerUTF8String();
+      tlvByteCount += utf8String.decode(is, false);
+      return tlvByteCount;
+    }
 
-		throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
-	}
+    if (tagWasPassed) {
+      return 0;
+    }
 
-	public void encodeAndSave(int encodingSizeGuess) throws IOException {
-		ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
-		encode(reverseOS);
-		code = reverseOS.getArray();
-	}
+    throw new IOException("Error decoding CHOICE: Tag " + berTag + " matched to no item.");
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		appendAsString(sb, 0);
-		return sb.toString();
-	}
+  public void encodeAndSave(int encodingSizeGuess) throws IOException {
+    ReverseByteArrayOutputStream reverseOS = new ReverseByteArrayOutputStream(encodingSizeGuess);
+    encode(reverseOS);
+    code = reverseOS.getArray();
+  }
 
-	public void appendAsString(StringBuilder sb, int indentLevel) {
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    appendAsString(sb, 0);
+    return sb.toString();
+  }
 
-		if (ia5String != null) {
-			sb.append("ia5String: ").append(ia5String);
-			return;
-		}
+  public void appendAsString(StringBuilder sb, int indentLevel) {
 
-		if (visibleString != null) {
-			sb.append("visibleString: ").append(visibleString);
-			return;
-		}
+    if (ia5String != null) {
+      sb.append("ia5String: ").append(ia5String);
+      return;
+    }
 
-		if (bmpString != null) {
-			sb.append("bmpString: ").append(bmpString);
-			return;
-		}
+    if (visibleString != null) {
+      sb.append("visibleString: ").append(visibleString);
+      return;
+    }
 
-		if (utf8String != null) {
-			sb.append("utf8String: ").append(utf8String);
-			return;
-		}
+    if (bmpString != null) {
+      sb.append("bmpString: ").append(bmpString);
+      return;
+    }
 
-		sb.append("<none>");
-	}
+    if (utf8String != null) {
+      sb.append("utf8String: ").append(utf8String);
+      return;
+    }
 
+    sb.append("<none>");
+  }
 }
-

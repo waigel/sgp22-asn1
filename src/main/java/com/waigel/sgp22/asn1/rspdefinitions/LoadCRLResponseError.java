@@ -9,21 +9,19 @@ import java.math.BigInteger;
 
 public class LoadCRLResponseError extends BerInteger {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public LoadCRLResponseError() {
-	}
+  public LoadCRLResponseError() {}
 
-	public LoadCRLResponseError(byte[] code) {
-		super(code);
-	}
+  public LoadCRLResponseError(byte[] code) {
+    super(code);
+  }
 
-	public LoadCRLResponseError(BigInteger value) {
-		super(value);
-	}
+  public LoadCRLResponseError(BigInteger value) {
+    super(value);
+  }
 
-	public LoadCRLResponseError(long value) {
-		super(value);
-	}
-
+  public LoadCRLResponseError(long value) {
+    super(value);
+  }
 }
